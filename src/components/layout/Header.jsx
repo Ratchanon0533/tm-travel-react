@@ -10,7 +10,7 @@ import styles from "./Header.module.css";
 
 /**
  * Fixed header: transparent over the hero (white logo), solid white after scrolling (color logo).
- * Includes the main nav, language switcher, CTA button and mobile menu.
+ * Includes the main nav, language switcher, CTA button and mobile menu (a curtain that drops from the top).
  */
 export default function Header() {
   const { lang, t } = useI18n();
@@ -50,14 +50,16 @@ export default function Header() {
 
         <nav className={styles.nav} id="mainNav" aria-label="Main">
           <ul>
-            {navigation.map((item) => (
-              <li key={item.href}>
+            {navigation.map((item, i) => (
+              // --i staggers the links in the mobile menu
+              <li key={item.href} style={{ "--i": i }}>
                 <a href={item.href} className={cx(activeHref === item.href && styles.active)} onClick={() => setNavOpen(false)}>
                   {t(item.key)}
                 </a>
               </li>
             ))}
           </ul>
+          <span className={styles.watermark} lang="ja" aria-hidden="true">旅</span>
         </nav>
 
         <div className={styles.actions}>

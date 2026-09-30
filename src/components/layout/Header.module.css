@@ -18,28 +18,33 @@
 /* Nav */
 .nav { margin-left: auto; }
 .nav ul { display: flex; gap: 34px; }
-.nav a { position: relative; padding: 6px 0; color: #fff; font-size: 15px; font-weight: 500; letter-spacing: 0.02em; transition: color 0.3s; }
-.nav a::after {
+.nav li a { position: relative; padding: 6px 0; color: #fff; font-size: 15px; font-weight: 500; letter-spacing: 0.02em; transition: color 0.3s; }
+.nav li a::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--gold);
   transform: scaleX(0); transform-origin: left; transition: transform 0.35s var(--ease);
 }
-.nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+.nav li a:hover::after, .nav li a.active::after { transform: scaleX(1); }
+.watermark { display: none; } /* mobile menu only */
 
 .actions { display: flex; align-items: center; gap: 14px; }
 
 /* Burger */
 .burger { display: none; position: relative; width: 44px; height: 44px; }
-.burger span { position: absolute; left: 11px; right: 11px; height: 2px; border-radius: 2px; background: #fff; transition: transform 0.35s var(--ease), opacity 0.2s, background 0.3s; }
+.burger span {
+  position: absolute; right: 11px; width: 22px; height: 2px; border-radius: 2px; background: #fff;
+  transition: transform 0.45s var(--ease), width 0.35s var(--ease), opacity 0.2s, background 0.3s;
+}
 .burger span:nth-child(1) { top: 15px; }
-.burger span:nth-child(2) { top: 21px; }
+.burger span:nth-child(2) { top: 21px; width: 14px; } /* shorter middle line, grows on hover */
 .burger span:nth-child(3) { top: 27px; }
+.burger:hover span:nth-child(2) { width: 22px; }
 
 /* Solid (scrolled) state */
 .solid { height: 72px; background: rgba(255, 255, 255, 0.96); backdrop-filter: saturate(1.4) blur(12px); box-shadow: 0 6px 30px -12px rgba(13, 17, 64, 0.25); }
 .solid::before { opacity: 0; }
 .solid .logoLight { opacity: 0; }
 .solid .logoDark { opacity: 1; }
-.solid .tagline, .solid .nav a { color: var(--navy); }
+.solid .tagline, .solid .nav li a { color: var(--navy); }
 .solid .burger span { background: var(--navy); }
 
 @media (max-width: 1100px) {
@@ -52,17 +57,44 @@
   /* the nav becomes a fixed overlay here, so push the buttons to the right ourselves */
   .actions { margin-left: auto; gap: 8px; }
   .solid { height: 64px; }
+  /*
+   * Mobile menu: a navy curtain drops from the top, then the numbered links rise
+   * one by one (--i is set per link in Header.jsx).
+   * Closing runs in reverse: the links fade out quickly, then the curtain rolls up.
+   */
   .nav {
-    position: fixed; inset: 0; z-index: -1; margin: 0; background: var(--navy-900);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; visibility: hidden; transition: opacity 0.4s var(--ease), visibility 0.4s;
+    position: fixed; inset: 0; z-index: -1; margin: 0; overflow: hidden auto;
+    padding: calc(var(--header-h) + 24px) var(--gutter) 36px;
+    background: radial-gradient(120% 60% at 100% 100%, rgba(248, 182, 45, 0.1), transparent 60%), var(--navy-900);
+    clip-path: inset(0 0 100% 0); visibility: hidden;
+    transition: clip-path 0.55s 0.15s cubic-bezier(0.7, 0, 0.3, 1), visibility 0s 0.7s;
   }
-  .nav ul { flex-direction: column; align-items: center; gap: 26px; }
-  .nav a { font-family: var(--font-head); font-size: 34px; color: #fff; }
+  .navOpen .nav { clip-path: inset(0); visibility: visible; transition: clip-path 0.6s cubic-bezier(0.7, 0, 0.3, 1), visibility 0s; }
 
-  .navOpen .nav { opacity: 1; visibility: visible; }
+  .nav ul { display: block; counter-reset: nav; }
+  .nav li { counter-increment: nav; overflow: hidden; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+  .nav li a, .solid .nav li a {
+    display: flex; align-items: baseline; gap: 18px; padding: 16px 0;
+    font-family: var(--font-head); font-size: 32px; line-height: 1.2; color: #fff;
+    transform: translateY(105%); opacity: 0; transition: transform 0.3s var(--ease), opacity 0.2s, color 0.3s;
+  }
+  .navOpen .nav li a {
+    transform: none; opacity: 1;
+    transition: transform 0.7s var(--ease) calc(0.3s + var(--i, 0) * 0.07s), opacity 0.5s calc(0.3s + var(--i, 0) * 0.07s), color 0.3s;
+  }
+  .nav li a::before { content: counter(nav, decimal-leading-zero); min-width: 22px; font-variant-numeric: tabular-nums; font-family: var(--font-body); font-size: 12px; font-weight: 600; letter-spacing: 0.15em; color: var(--gold); }
+  .nav li a::after { display: none; }
+  .nav li a.active, .nav li a:hover { color: var(--gold); }
+
+  .watermark {
+    display: block; position: absolute; right: -0.1em; bottom: -0.18em; z-index: -1; pointer-events: none;
+    font-family: var(--font-jp); font-size: min(80vw, 420px); line-height: 1; color: rgba(255, 255, 255, 0.035);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .navOpen .watermark { opacity: 1; transition: opacity 1.2s 0.4s; }
+
   .navOpen .burger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-  .navOpen .burger span:nth-child(2) { opacity: 0; }
+  .navOpen .burger span:nth-child(2) { width: 0; opacity: 0; }
   .navOpen .burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 }
 
