@@ -14,11 +14,19 @@ import styles from "./Hero.module.css";
 const JapanMap = lazy(() => import("../three/JapanMap.jsx"));
 
 const OVERVIEW = -1; // tour position before the first destination
-const OVERVIEW_MS = 3000;
+const OVERVIEW_MS = 2500;
+
+/** Great-circle distance between two { lat, lng } points, in km */
+function distanceKm(a, b) {
+  const rad = Math.PI / 180;
+  const h = Math.sin(((b.lat - a.lat) * rad) / 2) ** 2 + Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(((b.lng - a.lng) * rad) / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.sqrt(h));
+}
 
 /**
- * Full-screen hero over a 3D map of Japan that tours the destinations
- * (pins: "coords" in src/data/destinations/*.json · speed: site.heroIntervalMs).
+ * Full-screen hero over a 3D map of Japan that tours every destination with "coords"
+ * (src/data/destinations/*.json) from north to south, ending at our home. Each stop's photo and name
+ * appear together above its pin; the bars (or the pins) jump to a stop. Speed: site.heroIntervalMs.
  * Browsers without WebGL see the first photo from src/data/hero.json instead.
  */
 export default function Hero() {
@@ -31,10 +39,29 @@ export default function Hero() {
   const inView = useInView(ref);
   const running = inView && !paused;
 
-  const tour = useMemo(
-    () => destinations.filter((d) => d.coords).map((d) => ({ id: d.id, coords: d.coords, home: Boolean(d.home), name: tx(d.name), region: tx(d.region) })),
-    [tx],
-  );
+  const tour = useMemo(() => {
+    const places = destinations.filter((d) => d.coords);
+    const home = places.find((d) => d.home);
+    return places
+      .sort((a, b) => (a.home ? 1 : b.home ? -1 : b.coords.lat - a.coords.lat)) // north → south, home last
+      .map((d) => {
+        const km = home && !d.home ? Math.round(distanceKm(home.coords, d.coords) / 10) * 10 : null;
+        return {
+          id: d.id,
+          coords: d.coords,
+          home: Boolean(d.home),
+          photo: photoUrl(d.photo, 720),
+          name: tx(d.name),
+          region: tx(d.region),
+          note: km ? `${km.toLocaleString("en")} ${t("hero.fromHome")}` : null,
+        };
+      });
+  }, [t, tx]);
+
+  // Load the tour photos ahead, so each photo tag appears at once
+  useEffect(() => {
+    if (has3D) tour.forEach((p) => { new Image().src = p.photo; });
+  }, [has3D, tour]);
 
   // Auto-advance (restarts whenever the stop changes, so clicking a bar or pin resets the timer)
   useEffect(() => {
@@ -85,18 +112,15 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className={cx("container", styles.bottom)}>
-        {has3D && (
+      {has3D && (
+        <div className={cx("container", styles.bottom)}>
+          {/* Tour progress: the stop's photo and name are on the map, above its pin */}
           <div className={styles.tour}>
-            <p className={styles.stop} aria-live="polite">
+            <p className={styles.count}>
               {stop ? (
-                <>
-                  <em>{String(index + 1).padStart(2, "0")}</em>
-                  <strong>{stop.name}</strong>
-                  <span>{stop.region}</span>
-                </>
+                <><em>{String(index + 1).padStart(2, "0")}</em> / {String(tour.length).padStart(2, "0")}</>
               ) : (
-                <span>{t("hero.mapHint")}</span>
+                t("hero.mapHint")
               )}
             </p>
             <div className={styles.bars}>
@@ -115,9 +139,8 @@ export default function Hero() {
               ))}
             </div>
           </div>
-        )}
-        <a className={styles.scroll} href="#about"><span>{t("hero.scroll")}</span><i /></a>
-      </div>
+        </div>
+      )}
     </section>
   );
 }

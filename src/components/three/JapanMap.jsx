@@ -115,7 +115,7 @@ function Fuji() {
   );
 }
 
-/** Destination pin: pulsing ring on the ground, thin stem, glowing head, label when active */
+/** Destination pin: pulsing ring on the ground, thin stem, glowing head; when active, a tag with photo and name */
 function Pin({ place, active, glow, phase, still, homeLabel, onSelect }) {
   const ring = useRef(null);
   const head = useRef(null);
@@ -158,9 +158,13 @@ function Pin({ place, active, glow, phase, still, homeLabel, onSelect }) {
         {active && (
           <Html zIndexRange={[5, 0]} pointerEvents="none">
             <div className={styles.label}>
-              {place.home && <span className={styles.home}>{homeLabel}</span>}
-              <strong>{place.name}</strong>
-              <span>{place.region}</span>
+              {place.photo && <img className={styles.photo} src={place.photo} alt="" decoding="async" />}
+              <div className={styles.text}>
+                {place.home && <span className={styles.home}>{homeLabel}</span>}
+                <strong>{place.name}</strong>
+                <span className={styles.region}>{place.region}</span>
+                {place.note && <span className={styles.note}>{place.note}</span>}
+              </div>
             </div>
           </Html>
         )}
@@ -190,7 +194,9 @@ function Route({ from, to, active, still }) {
 }
 
 const OVERVIEW = { target: new Vector3(0.4, 0, -0.6), distance: 25 };
-const SHIFT = 0.48; // how far off-centre the focus sits (half a half-screen)
+// Where the focus sits, in half-screens from the centre: [right, up]. Wide screens: beside the hero
+// text and a little low, so the photo tag above the pin clears the header. Phones: above the text.
+const FOCUS = { wide: [0.48, -0.42], narrow: [0, 0.2] };
 
 /**
  * Moves the camera: whole-country overview, or a closer look at the active pin.
@@ -218,8 +224,9 @@ function CameraRig({ focus, still }) {
 
     // slide along the camera's right / up directions to put the focus off-centre
     const halfH = Math.tan(MathUtils.degToRad(camera.fov / 2)) * distance;
-    const sideways = wide ? -SHIFT * halfH * camera.aspect : 0;
-    const down = wide ? 0 : -SHIFT * halfH;
+    const [fx, fy] = wide ? FOCUS.wide : FOCUS.narrow;
+    const sideways = -fx * halfH * camera.aspect;
+    const down = -fy * halfH;
     const [sy, cy, sp, cp] = [Math.sin(yaw), Math.cos(yaw), Math.sin(pitch), Math.cos(pitch)];
     lookGoal.set(
       target.x + cy * sideways - sy * sp * down,
@@ -246,7 +253,7 @@ function CameraRig({ focus, still }) {
 
 /**
  * Props:
- *  places      [{ id, name, region, coords: { lat, lng }, home }] in tour order
+ *  places      [{ id, name, region, coords: { lat, lng }, home, photo (url), note }] in tour order
  *  active      index of the highlighted place (-1 = whole-country overview)
  *  onSelect    (index) => void, when a pin is clicked
  *  running     false pauses rendering (hero off screen / tab hidden)

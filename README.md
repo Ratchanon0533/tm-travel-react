@@ -24,6 +24,7 @@ npm run preview    # preview the production build
 | A destination (text, photo, category, order, map pin `coords`) | `src/data/destinations/<place>.json` |
 | 3D map look (colors, pins, camera) | `src/components/three/JapanMap.jsx` |
 | Seasonal particles (petals, fireflies, leaves, snow) | `KINDS` in `src/components/three/SeasonParticles.jsx` |
+| Photo tag above the active pin (size, style) | `src/components/three/JapanMap.module.css` |
 | Hero photo (only shown in browsers without 3D) | first entry of `src/data/hero.json` |
 | Seasons / Experiences | `src/data/seasons.json`, `src/data/experiences.json` |
 | "Why us" cards / planning steps | `src/data/features.json`, `src/data/steps.json` (text keys live in `src/i18n`) |
@@ -63,7 +64,7 @@ src/
 ├── hooks/                      useScrolled, useMediaQuery, useReveal, useDocumentHead,
 │                               use3D, useInView, useTilt
 └── components/
-    ├── three/                  JapanMap (hero), SeasonParticles — 3D, loaded only when shown
+    ├── three/                  JapanMap (hero map tour), SeasonParticles — 3D, loaded only when shown
     ├── ui/                     Icon, Button, Eyebrow, SectionHeading
     ├── layout/                 Header, LanguageSwitcher, Footer, BackToTop
     ├── sections/               Hero, Intro, Destinations, Seasons, Experiences, CallToAction
@@ -103,15 +104,15 @@ In the browser, `main.jsx` hydrates that HTML, so the page is readable before Ja
 
 The 3D parts sit on top of the normal page. All text stays in the HTML, so search engines, translations and screen readers work as before.
 
-- **Hero map** (`components/three/JapanMap.jsx`): a 3D map of Japan with a pin for each destination (`coords` in its JSON file) and gold routes from the destination marked `"home": true`. The camera tours the pins; visitors can click a pin or a bar under the hero. The coastline comes from Natural Earth (public domain) and is made by `node scripts/build-japan-map.mjs`.
-- **Seasonal particles** (`components/three/SeasonParticles.jsx`): petals, fireflies, maple leaves or snow over the Seasons panels, matching the open season.
+- **Hero map tour** (`sections/Hero.jsx` + `components/three/JapanMap.jsx`): a 3D map of Japan behind the hero, with a pin for every destination (`coords` in its JSON file) and gold routes from our home (the destination marked `"home": true`). The camera tours the pins on its own — north to south, ending at our home — and each stop's photo, name and distance from Matsuyama appear together in a tag above its pin. Visitors can click a pin or one of the bars (bottom right) to jump to a stop. Speed: `heroIntervalMs` in `site.js`. The coastline comes from Natural Earth (public domain) and is made by `node scripts/build-japan-map.mjs`.
+- **Seasonal particles** (`components/three/SeasonParticles.jsx`): cherry petals, fireflies, maple leaves or snow over the Seasons panels, matching the open season.
 - **Tilting cards** (`hooks/useTilt.js`): destination and experience cards lean toward the mouse. CSS only, no three.js.
 
-The 3D code (~250 kB gzipped) downloads only after the page is visible and only in browsers with WebGL (`hooks/use3D.js`); other browsers show the first photo from `hero.json`. Scenes pause when scrolled off screen or when the tab is hidden, and visitors who ask for reduced motion get a still map and no particles.
+The 3D code (~250 kB gzipped) downloads only after the page is visible and only in browsers with WebGL (`hooks/use3D.js`); other browsers show the first photo from `hero.json`. Scenes pause when scrolled off screen or when the tab is hidden, and visitors who ask for reduced motion get a still map (no automatic tour) and no particles.
 
 ## Common tasks
 
-**Add a destination.** Copy `src/data/destinations/nara.json` to a new file and edit it, including `coords` (latitude/longitude, e.g. from Google Maps) for its pin on the 3D map. Then add its photo to `src/data/photos.json`. The Unsplash ID is the part after `photo-` in an image URL.
+**Add a destination.** Copy `src/data/destinations/nara.json` to a new file and edit it, including `coords` (latitude/longitude, e.g. from Google Maps) for its pin and its stop in the hero map tour. Then add its photo to `src/data/photos.json`. The Unsplash ID is the part after `photo-` in an image URL.
 
 **Hide a destination** without deleting it: add `"hidden": true` to its file.
 
