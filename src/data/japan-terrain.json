@@ -1,0 +1,10 @@
+{
+  "source": "NOAA ETOPO1 (public domain)",
+  "west": 123.46666666666664,
+  "north": 45.71666666666667,
+  "step": 0.01666666666666667,
+  "width": 1355,
+  "height": 1300,
+  "maxElevation": 2986,
+  "encoding": "sqrt"
+}

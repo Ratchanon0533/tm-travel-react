@@ -50,7 +50,7 @@ export default function Hero() {
           id: d.id,
           coords: d.coords,
           home: Boolean(d.home),
-          photo: photoUrl(d.photo, 720),
+          photo: photoUrl(d.photo, 960),
           name: tx(d.name),
           region: tx(d.region),
           note: km ? `${km.toLocaleString("en")} ${t("hero.fromHome")}` : null,

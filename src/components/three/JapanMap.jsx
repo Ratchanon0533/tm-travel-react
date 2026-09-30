@@ -1,29 +1,41 @@
 /**
  * 3D map of Japan behind the hero (browser only — loaded lazily by Hero.jsx).
  * Coastline: src/data/japan-map.json (made by scripts/build-japan-map.mjs)
+ * Elevation: src/data/japan-terrain.png (made by scripts/build-japan-terrain.mjs), see terrain.js
  * Pins: "coords" in src/data/destinations/*.json · routes start at the destination with "home": true
  */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Html, Line } from "@react-three/drei";
 import {
-  AdditiveBlending, BufferGeometry, CanvasTexture, ExtrudeGeometry, Float32BufferAttribute,
-  MathUtils, QuadraticBezierCurve3, Shape, Vector2, Vector3,
+  AdditiveBlending, BufferGeometry, CanvasTexture, Color, DoubleSide, Float32BufferAttribute,
+  MathUtils, QuadraticBezierCurve3, Vector3,
 } from "three";
 import map from "../../data/japan-map.json";
+import { loadTerrain } from "./terrain.js";
 import { cx } from "../../lib/cx.js";
 import styles from "./JapanMap.module.css";
 
 // Scene colors (brand navy & gold from tokens.css)
 const GOLD = "#f8b62d";
-const LAND = "#303d96";
 const FOG = "#0a0e36";
+
+// Land looks: `wall` = sides of the islands, `tints` = land colour by elevation (metres). Pick one with LAND_STYLE.
+const LAND_STYLES = {
+  // green plains → deep forest → bare rock above the tree line → snow on the highest peaks
+  forest: { wall: "#5b4a36", tints: [[0, "#94b36c"], [300, "#62924f"], [900, "#3e6e42"], [1700, "#5f6f4f"], [2200, "#9a9483"], [2700, "#ffffff"]] },
+  // warm sand on the coast → ivory uplands → snow
+  sand: { wall: "#b8a27c", tints: [[0, "#cdb88f"], [400, "#dccdab"], [1100, "#ece3cd"], [1900, "#f7f3ea"], [2500, "#ffffff"]] },
+};
+const LAND_STYLE = "forest";
+const WALL = LAND_STYLES[LAND_STYLE].wall;
+const TINTS = LAND_STYLES[LAND_STYLE].tints.map(([m, c]) => [m, new Color(c)]);
 
 const CENTER = { lng: 136.5, lat: 35.2 }; // middle of the map
 const LNG_SCALE = Math.cos((CENTER.lat * Math.PI) / 180); // keeps the islands in proportion
-const LAND_H = 0.32; // thickness of the islands
-const PIN_H = 1.05; // pin height above the land
-const MT_FUJI = { lat: 35.36, lng: 138.73 };
+const LAND_H = 0.32; // thickness of the islands at sea level
+const RELIEF = 0.00025; // scene units per metre of elevation (≈28× exaggerated, so Mt. Fuji rises ~0.75)
+const PIN_H = 1.05; // pin height above the ground
 
 /** lng/lat → flat map position (x east, y north) */
 const toPlane = (lng, lat) => [(lng - CENTER.lng) * LNG_SCALE, lat - CENTER.lat];
@@ -32,6 +44,16 @@ const toWorld = ({ lat, lng }, height = LAND_H) => {
   const [x, y] = toPlane(lng, lat);
   return new Vector3(x, height, -y);
 };
+/** Height of the ground above the sea for an elevation in metres */
+const groundY = (metres) => LAND_H + metres * RELIEF;
+
+function tint(metres, out) {
+  let k = 1;
+  while (k < TINTS.length - 1 && metres > TINTS[k][0]) k++;
+  const [m0, c0] = TINTS[k - 1];
+  const [m1, c1] = TINTS[k];
+  return out.copy(c0).lerp(c1, MathUtils.clamp((metres - m0) / (m1 - m0), 0, 1));
+}
 
 /** Soft round glow, drawn once and shared by all pins */
 function makeGlowTexture() {
@@ -46,36 +68,106 @@ function makeGlowTexture() {
   return new CanvasTexture(canvas);
 }
 
-/** The islands (extruded coastline) with a thin gold outline on top */
-function Land() {
-  const [land, coast] = useMemo(() => {
-    const rings = map.islands.map((ring) => {
-      const pts = ring.map(([lng, lat]) => new Vector2(...toPlane(lng, lat)));
-      if (pts[0].equals(pts[pts.length - 1])) pts.pop();
-      return pts;
-    });
-    const land = new ExtrudeGeometry(rings.map((pts) => new Shape(pts)), { depth: LAND_H, bevelEnabled: false });
-    land.rotateX(-Math.PI / 2);
+/**
+ * The islands as a relief model: an elevation surface (a vertex on every `detail`-th grid point of the
+ * height map, cut to the exact coastline by a mask), sides down to the sea, and a thin gold outline.
+ */
+function buildLand(terrain, detail) {
+  const { west, north, step, width: W, height: H, metres, at } = terrain;
+  const east = west + (W - 1) * step;
+  const south = north - (H - 1) * step;
+  const closed = (ring) => ring[0][0] === ring.at(-1)[0] && ring[0][1] === ring.at(-1)[1];
+  const rings = map.islands.map((ring) => (closed(ring) ? ring.slice(0, -1) : ring));
 
-    const segments = [];
-    const y = LAND_H + 0.003;
-    for (const pts of rings) {
-      pts.forEach((p, i) => {
-        const q = pts[(i + 1) % pts.length];
-        segments.push(p.x, y, -p.y, q.x, y, -q.y);
-      });
+  // Coastline masks (white = land): a large one cuts the surface to the coast; a grid-sized one,
+  // fattened by `grow` pixels, picks the grid cells worth building
+  const drawMask = (w, h, sx, sy, grow) => {
+    const canvas = Object.assign(document.createElement("canvas"), { width: w, height: h });
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const off = grow ? 0.5 : 0; // in the grid-sized mask each pixel centre is a grid point
+    ctx.fillStyle = ctx.strokeStyle = "#fff";
+    ctx.lineWidth = grow;
+    ctx.beginPath();
+    for (const ring of rings) {
+      ring.forEach(([lng, lat], k) => ctx[k ? "lineTo" : "moveTo"](off + (lng - west) * sx, off + (north - lat) * sy));
+      ctx.closePath();
     }
-    const coast = new BufferGeometry();
-    coast.setAttribute("position", new Float32BufferAttribute(segments, 3));
-    return [land, coast];
-  }, []);
+    ctx.fill();
+    if (grow) ctx.stroke();
+    return canvas;
+  };
+  const [mw, mh] = [2048, Math.round((2048 * H) / W)];
+  const mask = new CanvasTexture(drawMask(mw, mh, mw / (east - west), mh / (north - south), 0));
+  const gw = Math.floor((W - 1) / detail) + 1; // grid points used
+  const gh = Math.floor((H - 1) / detail) + 1;
+  const near = drawMask(gw, gh, 1 / (detail * step), 1 / (detail * step), 3).getContext("2d").getImageData(0, 0, gw, gh).data;
 
+  // Surface: only the grid cells on or next to land
+  const index = new Int32Array(gw * gh).fill(-1);
+  const pos = [], uv = [], col = [], tris = [];
+  const color = new Color();
+  const vertex = (i, j) => {
+    if (index[j * gw + i] < 0) {
+      index[j * gw + i] = pos.length / 3;
+      const [gi, gj] = [i * detail, j * detail];
+      const m = metres[gj * W + gi];
+      const [x, y] = toPlane(west + gi * step, north - gj * step);
+      pos.push(x, groundY(m), -y);
+      uv.push(gi / (W - 1), 1 - gj / (H - 1));
+      tint(m, color);
+      col.push(color.r, color.g, color.b);
+    }
+    return index[j * gw + i];
+  };
+  const isNear = (i, j) => near[(j * gw + i) * 4] > 0;
+  for (let j = 0; j < gh - 1; j++) {
+    for (let i = 0; i < gw - 1; i++) {
+      if (!(isNear(i, j) || isNear(i + 1, j) || isNear(i, j + 1) || isNear(i + 1, j + 1))) continue;
+      const a = vertex(i, j), b = vertex(i + 1, j), c = vertex(i, j + 1), d = vertex(i + 1, j + 1);
+      tris.push(a, c, b, b, c, d);
+    }
+  }
+  const surface = new BufferGeometry();
+  surface.setAttribute("position", new Float32BufferAttribute(pos, 3));
+  surface.setAttribute("uv", new Float32BufferAttribute(uv, 2));
+  surface.setAttribute("color", new Float32BufferAttribute(col, 3));
+  surface.setIndex(tris);
+  surface.computeVertexNormals();
+
+  // Sides from the sea up to the ground along the coast, and the gold outline along their top
+  const walls = [], coast = [];
+  for (const ring of rings) {
+    const pts = ring.map(([lng, lat]) => [...toPlane(lng, lat), groundY(at(lng, lat))]);
+    pts.forEach(([x1, y1, h1], k) => {
+      const [x2, y2, h2] = pts[(k + 1) % pts.length];
+      walls.push(x1, 0, -y1, x2, 0, -y2, x2, h2, -y2, x1, 0, -y1, x2, h2, -y2, x1, h1, -y1);
+      coast.push(x1, h1 + 0.004, -y1, x2, h2 + 0.004, -y2);
+    });
+  }
+  const sides = new BufferGeometry();
+  sides.setAttribute("position", new Float32BufferAttribute(walls, 3));
+  sides.computeVertexNormals();
+  const outline = new BufferGeometry();
+  outline.setAttribute("position", new Float32BufferAttribute(coast, 3));
+
+  return { surface, mask, sides, outline };
+}
+
+function Land({ terrain }) {
+  // phones get every other grid point (a quarter of the triangles)
+  const { surface, mask, sides, outline } = useMemo(
+    () => buildLand(terrain, Math.min(window.innerWidth, window.innerHeight) < 600 ? 2 : 1),
+    [terrain],
+  );
   return (
     <>
-      <mesh geometry={land}>
-        <meshStandardMaterial color={LAND} roughness={0.85} metalness={0.05} />
+      <mesh geometry={surface}>
+        <meshStandardMaterial vertexColors alphaMap={mask} alphaTest={0.5} alphaToCoverage roughness={0.92} metalness={0} />
       </mesh>
-      <lineSegments geometry={coast}>
+      <mesh geometry={sides}>
+        <meshStandardMaterial color={WALL} side={DoubleSide} roughness={0.95} metalness={0} />
+      </mesh>
+      <lineSegments geometry={outline}>
         <lineBasicMaterial color={GOLD} transparent opacity={0.55} />
       </lineSegments>
     </>
@@ -95,23 +187,6 @@ function SeaDots() {
     <points geometry={geometry}>
       <pointsMaterial color="#8391ff" size={0.045} sizeAttenuation transparent opacity={0.32} depthWrite={false} />
     </points>
-  );
-}
-
-/** Mt. Fuji: a small snow-capped cone */
-function Fuji() {
-  const p = toWorld(MT_FUJI);
-  return (
-    <group position={p}>
-      <mesh position-y={0.4}>
-        <coneGeometry args={[0.42, 0.8, 7, 1, true]} />
-        <meshStandardMaterial color="#3a47a6" roughness={0.9} flatShading />
-      </mesh>
-      <mesh position-y={0.66}>
-        <coneGeometry args={[0.147, 0.28, 7]} />
-        <meshStandardMaterial color="#f4f1ea" roughness={0.7} flatShading />
-      </mesh>
-    </group>
   );
 }
 
@@ -261,15 +336,28 @@ function CameraRig({ focus, still }) {
  */
 export default function JapanMap({ places, active, onSelect, running, still, homeLabel }) {
   const [ready, setReady] = useState(false);
+  const [terrain, setTerrain] = useState(null);
   const glow = useMemo(makeGlowTexture, []);
-  const pins = useMemo(() => places.map((p) => ({ ...p, position: toWorld(p.coords) })), [places]);
+  // pins stand on the ground, so a pin on a mountain sits higher
+  const pins = useMemo(
+    () => (terrain ? places.map((p) => ({ ...p, position: toWorld(p.coords, groundY(terrain.at(p.coords.lng, p.coords.lat))) })) : []),
+    [places, terrain],
+  );
   const routes = useMemo(() => {
     const home = pins.find((p) => p.home);
     if (!home) return [];
-    const top = (p) => p.position.clone().setY(LAND_H + PIN_H);
+    const top = (p) => p.position.clone().setY(p.position.y + PIN_H);
     return pins.filter((p) => p !== home).map((p) => ({ place: p, from: top(home), to: top(p) }));
   }, [pins]);
   const focus = pins[active]?.position;
+
+  useEffect(() => {
+    let live = true;
+    loadTerrain().then((t) => live && setTerrain(t));
+    return () => { live = false; };
+  }, []);
+
+  if (!terrain) return null;
 
   return (
     <Canvas
@@ -285,8 +373,7 @@ export default function JapanMap({ places, active, onSelect, running, still, hom
       <directionalLight position={[6, 14, 8]} intensity={1.7} color="#fff1d6" />
       <directionalLight position={[-8, 6, -6]} intensity={0.4} color="#6f7bff" />
       <SeaDots />
-      <Land />
-      <Fuji />
+      <Land terrain={terrain} />
       {routes.map(({ place, from, to }) => (
         <Route key={place.id} from={from} to={to} active={pins[active] === place} still={still} />
       ))}

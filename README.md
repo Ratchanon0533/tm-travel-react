@@ -42,7 +42,8 @@ vite.config.js
 scripts/
 ├── prerender.js                Writes dist/index.html, dist/th/index.html, … after the build
 ├── download-images.mjs         Optional: download photos locally
-└── build-japan-map.mjs         Makes src/data/japan-map.json (coastline of the 3D map)
+├── build-japan-map.mjs         Makes src/data/japan-map.json (coastline of the 3D map)
+└── build-japan-terrain.mjs     Makes src/data/japan-terrain.png (mountains of the 3D map)
 src/
 ├── main.jsx                    Browser entry: hydrates the prerendered page (createRoot in dev)
 ├── entry-server.jsx            Prerender entry: renderToString(<App lang="…" />)
@@ -64,7 +65,7 @@ src/
 ├── hooks/                      useScrolled, useMediaQuery, useReveal, useDocumentHead,
 │                               use3D, useInView, useTilt
 └── components/
-    ├── three/                  JapanMap (hero map tour), SeasonParticles — 3D, loaded only when shown
+    ├── three/                  JapanMap (hero map tour) + terrain.js, SeasonParticles — 3D, loaded only when shown
     ├── ui/                     Icon, Button, Eyebrow, SectionHeading
     ├── layout/                 Header, LanguageSwitcher, Footer, BackToTop
     ├── sections/               Hero, Intro, Destinations, Seasons, Experiences, CallToAction
@@ -104,7 +105,7 @@ In the browser, `main.jsx` hydrates that HTML, so the page is readable before Ja
 
 The 3D parts sit on top of the normal page. All text stays in the HTML, so search engines, translations and screen readers work as before.
 
-- **Hero map tour** (`sections/Hero.jsx` + `components/three/JapanMap.jsx`): a 3D map of Japan behind the hero, with a pin for every destination (`coords` in its JSON file) and gold routes from our home (the destination marked `"home": true`). The camera tours the pins on its own — north to south, ending at our home — and each stop's photo, name and distance from Matsuyama appear together in a tag above its pin. Visitors can click a pin or one of the bars (bottom right) to jump to a stop. Speed: `heroIntervalMs` in `site.js`. The coastline comes from Natural Earth (public domain) and is made by `node scripts/build-japan-map.mjs`.
+- **Hero map tour** (`sections/Hero.jsx` + `components/three/JapanMap.jsx`): a 3D map of Japan behind the hero, with a pin for every destination (`coords` in its JSON file) and gold routes from our home (the destination marked `"home": true`). The camera tours the pins on its own — north to south, ending at our home — and each stop's photo, name and distance from Matsuyama appear together in a tag above its pin. Visitors can click a pin or one of the bars (bottom right) to jump to a stop. Speed: `heroIntervalMs` in `site.js`. The islands are a relief model with real mountains (about 28× taller than life, so the Japan Alps and Mt. Fuji stand out), lit so the relief shows as the camera flies between stops; phones get a lighter version of the same model. The coastline comes from Natural Earth (public domain) and is made by `node scripts/build-japan-map.mjs`; the elevation comes from NOAA ETOPO1 (public domain, ~100 kB) and is made by `node scripts/build-japan-terrain.mjs` (it downloads the data, so it needs internet). Colours and relief height are at the top of `JapanMap.jsx`: `LAND_STYLE` switches between "forest" (green, rocky and snowy peaks) and "sand".
 - **Seasonal particles** (`components/three/SeasonParticles.jsx`): cherry petals, fireflies, maple leaves or snow over the Seasons panels, matching the open season.
 - **Tilting cards** (`hooks/useTilt.js`): destination and experience cards lean toward the mouse. CSS only, no three.js.
 
