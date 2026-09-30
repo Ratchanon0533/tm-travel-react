@@ -1,0 +1,19 @@
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.6em;
+  padding: 15px 28px; border-radius: 999px;
+  font-weight: 600; font-size: 15px; letter-spacing: 0.02em; line-height: 1.2; white-space: nowrap;
+  transition: background 0.3s var(--ease), color 0.3s var(--ease), transform 0.3s var(--ease), border-color 0.3s;
+}
+.iconRight { transition: transform 0.3s var(--ease); }
+.btn:hover .iconRight { transform: translateX(3px); }
+
+.gold { background: var(--gold); color: var(--navy-900); box-shadow: 0 10px 30px -10px rgba(248, 182, 45, 0.6); }
+.gold:hover { background: var(--gold-hover); transform: translateY(-2px); }
+
+.ghost { border: 1.5px solid rgba(255, 255, 255, 0.7); color: #fff; background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(4px); }
+.ghost:hover { background: #fff; color: var(--navy-900); border-color: #fff; }
+
+.navy { background: var(--navy); color: #fff; }
+.navy:hover { background: var(--navy-900); transform: translateY(-2px); }
+
+.sm { padding: 10px 20px; font-size: 14px; }

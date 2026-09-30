@@ -1,0 +1,42 @@
+[
+  {
+    "photo": "hero-fuji",
+    "caption": {
+      "en": "Chureito Pagoda & Mt. Fuji",
+      "th": "เจดีย์ชูเรโตะ & ภูเขาไฟฟูจิ",
+      "zh": "忠灵塔与富士山",
+      "ko": "주레이토 파고다 & 후지산",
+      "ja": "忠霊塔と富士山"
+    }
+  },
+  {
+    "photo": "hero-kyoto",
+    "caption": {
+      "en": "Higashiyama, Kyoto",
+      "th": "ฮิงาชิยามะ เกียวโต",
+      "zh": "京都·东山",
+      "ko": "교토 히가시야마",
+      "ja": "京都・東山"
+    }
+  },
+  {
+    "photo": "hero-tokyo",
+    "caption": {
+      "en": "Tokyo by Night",
+      "th": "โตเกียวยามค่ำคืน",
+      "zh": "东京夜色",
+      "ko": "도쿄의 밤",
+      "ja": "東京の夜"
+    }
+  },
+  {
+    "photo": "hero-shirakawa",
+    "caption": {
+      "en": "Shirakawa-go in Winter",
+      "th": "ชิราคาวาโกะในฤดูหนาว",
+      "zh": "冬日白川乡",
+      "ko": "겨울의 시라카와고",
+      "ja": "冬の白川郷"
+    }
+  }
+]

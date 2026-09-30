@@ -1,0 +1,19 @@
+.intro { overflow: hidden; }
+.watermark {
+  position: absolute; top: 60px; right: 3vw; writing-mode: vertical-rl; pointer-events: none; user-select: none;
+  font-family: var(--font-jp); font-size: clamp(60px, 9vw, 130px); font-weight: 700; letter-spacing: 0.15em; color: rgba(23, 28, 97, 0.045);
+}
+.grid { position: relative; display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(40px, 7vw, 100px); align-items: center; }
+.more { margin: 0; color: var(--muted); }
+.features { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+/* staggered second column */
+.features > :nth-child(even) { margin-top: 34px; margin-bottom: -34px; }
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
+  .watermark { display: none; }
+}
+@media (max-width: 600px) {
+  .features { grid-template-columns: 1fr; }
+  .features > :nth-child(even) { margin: 0; }
+}

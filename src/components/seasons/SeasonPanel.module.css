@@ -1,0 +1,38 @@
+.season { --open: 3.4; position: relative; isolation: isolate; flex: 1; min-width: 0; overflow: hidden; border-radius: var(--radius-lg); color: #fff; cursor: pointer; transition: flex 0.8s var(--ease); }
+.season.active { flex: var(--open); }
+.season img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+.season:hover img { transform: scale(1.05); }
+.season::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(8, 11, 44, 0.88), rgba(8, 11, 44, 0.15) 65%); }
+
+.kanji { position: absolute; top: 22px; left: 22px; font-family: var(--font-jp); font-size: 40px; font-weight: 700; line-height: 1; text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3); }
+.label {
+  position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%) rotate(180deg); writing-mode: vertical-rl;
+  font-size: 15px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; transition: opacity 0.4s 0.4s;
+}
+/* Latin & Thai read bottom-to-top; Chinese/Korean characters stay upright, top-to-bottom */
+:global(:root:is(:lang(zh), :lang(ko))) .label { transform: translateX(-50%); letter-spacing: 0.3em; }
+/* In Japanese the label would repeat the kanji shown at the top */
+:global(:root:lang(ja)) .label { display: none; }
+.active .label { opacity: 0; transition: opacity 0.15s; }
+
+/*
+ * The text always has the open panel's width (4 panels: 3 × flex 1 + 1 × flex --open, 3 gaps),
+ * so it gets clipped instead of re-wrapping while the panel resizes.
+ * Closing: fade out at once, before the panel narrows. Opening: wait until it has mostly widened.
+ */
+.content {
+  position: absolute; left: 0; bottom: 0; width: calc((100cqw - 3 * var(--gap, 14px)) * var(--open) / (3 + var(--open)));
+  padding: 34px; opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity 0.2s, transform 0.2s;
+}
+.active .content { opacity: 1; transform: none; transition: opacity 0.5s 0.3s, transform 0.6s 0.3s var(--ease); }
+.months { display: inline-block; margin-bottom: 14px; padding: 5px 12px; border-radius: 999px; background: var(--gold); color: var(--navy-900); font-size: 12.5px; font-weight: 600; letter-spacing: 0.12em; }
+.content h3 { margin-bottom: 10px; font-family: var(--font-head); font-size: clamp(30px, 3vw, 42px); }
+.content p { max-width: 520px; font-size: 15.5px; color: rgba(255, 255, 255, 0.88); }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tags li { padding: 6px 13px; border-radius: 999px; font-size: 13px; background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.25); backdrop-filter: blur(6px); }
+
+@media (max-width: 900px) {
+  .season, .season.active { flex: none; height: 380px; }
+  .label { display: none; }
+  .content { width: auto; right: 0; opacity: 1; transform: none; padding: 26px; }
+}

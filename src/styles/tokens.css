@@ -1,0 +1,50 @@
+/* =========================================================
+   Design tokens — change the brand here.
+   Palette sampled from the TM Travel logo:
+     navy #171C61 (wordmark)   gold #F8B62D (chevron)
+   ========================================================= */
+:root {
+  /* Brand colors */
+  --navy: #171c61;
+  --navy-700: #1c2a54;
+  --navy-900: #0d1140;
+  --navy-950: #080b2c;
+  --gold: #f8b62d;
+  --gold-hover: #ffc54a;
+  --gold-600: #e29f14;
+
+  /* Neutrals */
+  --ivory: #faf7f0;
+  --sand: #f2ede2;
+  --white: #fff;
+  --ink: #181b36;
+  --muted: #5d6280;
+  --line: rgba(23, 28, 97, 0.12);
+
+  /* Typography */
+  --font-head: "Cormorant Garamond", "Noto Serif JP", Georgia, serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-jp: "Noto Serif JP", serif;
+
+  /* Layout */
+  --container: 1240px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --section-y: clamp(80px, 11vw, 140px);
+  --header-h: 84px;
+  --radius: 14px;
+  --radius-lg: 22px;
+
+  /* Motion & depth */
+  --ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+  --shadow: 0 20px 50px -20px rgba(13, 17, 64, 0.35);
+}
+
+/* Per-language font stacks (fonts are loaded in <head> by BaseLayout) */
+:root:lang(ja) { --font-head: "Noto Serif JP", "Cormorant Garamond", serif; --font-body: "Noto Sans JP", "Inter", sans-serif; }
+:root:lang(th) { --font-head: "Noto Serif Thai", "Cormorant Garamond", serif; --font-body: "Noto Sans Thai", "Inter", sans-serif; }
+:root:lang(zh) { --font-head: "Noto Serif SC", "Cormorant Garamond", serif; --font-body: "Noto Sans SC", "Inter", sans-serif; }
+:root:lang(ko) { --font-head: "Noto Serif KR", "Cormorant Garamond", serif; --font-body: "Noto Sans KR", "Inter", sans-serif; }
+
+@media (max-width: 900px) {
+  :root { --header-h: 70px; }
+}

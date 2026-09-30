@@ -1,0 +1,21 @@
+{
+  "name": "tm-travel-inbound",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "TM Travel — inbound Japan travel landing page (React + Vite, prerendered per language)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.js",
+    "preview": "vite preview",
+    "images:download": "node scripts/download-images.mjs"
+  },
+  "dependencies": {
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.1",
+    "vite": "^8.3.1"
+  }
+}

@@ -1,0 +1,42 @@
+.modal {
+  width: min(1060px, calc(100% - 48px)); max-width: none; max-height: calc(100svh - 48px); padding: 0; border: 0;
+  border-radius: var(--radius-lg); overflow: hidden; background: #fff; color: var(--ink);
+  box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.6);
+}
+.modal[open] { animation: pop 0.45s var(--ease); }
+.modal::backdrop { background: rgba(8, 11, 44, 0.72); backdrop-filter: blur(6px); }
+@keyframes pop { from { opacity: 0; transform: translateY(24px) scale(0.98); } }
+
+.panel { display: grid; grid-template-columns: 1fr 1.05fr; max-height: calc(100svh - 48px); }
+.media { position: relative; min-height: 100%; }
+.media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.body { padding: clamp(28px, 4vw, 48px); overflow-y: auto; }
+
+.title { margin-bottom: 14px; font-family: var(--font-head); font-size: clamp(34px, 3.6vw, 48px); color: var(--navy); }
+.desc { font-size: 16px; color: var(--muted); }
+.sub { margin: 24px 0 12px; font-family: var(--font-body); font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--navy); }
+.highlights { display: grid; gap: 10px; margin-bottom: 26px; }
+.highlights li { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; }
+.highlights :global(.icon) { margin-top: 4px; color: var(--gold); }
+
+.info { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0 0 28px; }
+.info div { padding: 16px 18px; border-radius: 12px; background: var(--ivory); }
+.info dt { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy); }
+.info dt :global(.icon) { color: var(--gold-600); }
+.info dd { margin: 0; font-size: 14.5px; line-height: 1.5; }
+
+.close {
+  position: absolute; top: 14px; right: 14px; z-index: 2; width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center; background: #fff; color: var(--navy); box-shadow: 0 6px 20px -6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s var(--ease);
+}
+.close:hover { transform: rotate(90deg); }
+
+/* Bottom sheet on small screens */
+@media (max-width: 900px) {
+  .modal { width: 100%; max-height: 92svh; margin: auto 0 0; border-radius: var(--radius-lg) var(--radius-lg) 0 0; overflow-y: auto; }
+  .panel { grid-template-columns: 1fr; max-height: none; }
+  .media { height: 240px; min-height: 0; }
+  .body { overflow: visible; }
+}
+@media (max-width: 600px) { .info { grid-template-columns: 1fr; } }

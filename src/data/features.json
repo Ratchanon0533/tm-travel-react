@@ -1,0 +1,6 @@
+[
+  { "icon": "compass",  "title": "f1.t", "text": "f1.d" },
+  { "icon": "route",    "title": "f2.t", "text": "f2.d" },
+  { "icon": "chat",     "title": "f3.t", "text": "f3.d" },
+  { "icon": "suitcase", "title": "f4.t", "text": "f4.d" }
+]

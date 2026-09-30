@@ -1,0 +1,22 @@
+.lang { position: relative; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 999px;
+  color: #fff; font-size: 14px; font-weight: 600; border: 1px solid rgba(255, 255, 255, 0.35); transition: all 0.3s;
+}
+.btn:hover { background: rgba(255, 255, 255, 0.12); }
+
+.dark .btn { color: var(--navy); border-color: var(--line); }
+.dark .btn:hover { background: var(--sand); }
+
+.menu {
+  position: absolute; right: 0; top: calc(100% + 10px); min-width: 170px; padding: 6px;
+  background: #fff; border-radius: 12px; box-shadow: var(--shadow);
+  opacity: 0; visibility: hidden; transform: translateY(-6px); transition: all 0.25s var(--ease);
+}
+.open .menu { opacity: 1; visibility: visible; transform: none; }
+.menu a { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: 8px; font-size: 15px; color: var(--ink); }
+.menu a:hover { background: var(--sand); }
+.menu a[aria-current] { color: var(--navy); font-weight: 600; }
+.menu a[aria-current]::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+
+@media (max-width: 600px) { .btn { padding: 7px 10px; } }

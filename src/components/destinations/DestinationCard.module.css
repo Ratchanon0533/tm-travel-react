@@ -1,0 +1,33 @@
+.card {
+  position: relative; isolation: isolate; display: block; width: 100%; height: 100%; overflow: hidden;
+  border-radius: var(--radius-lg); background: var(--navy-900); color: #fff; text-align: left; cursor: pointer;
+  animation: cardIn 0.7s var(--ease) both;
+}
+@keyframes cardIn { from { opacity: 0; transform: translateY(24px); } }
+
+.card img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+.card::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(8, 11, 44, 0.9) 0%, rgba(8, 11, 44, 0.25) 50%, rgba(8, 11, 44, 0) 75%); transition: background 0.5s; }
+.card:hover img { transform: scale(1.07); }
+.card:hover::after { background: linear-gradient(to top, rgba(8, 11, 44, 0.95) 0%, rgba(8, 11, 44, 0.45) 60%, rgba(8, 11, 44, 0.1) 100%); }
+
+.body { position: absolute; left: 0; right: 0; bottom: 0; padding: 24px 24px 22px; }
+.region { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+.name { display: block; font-family: var(--font-head); font-size: 30px; font-weight: 600; line-height: 1.1; }
+.desc {
+  display: block; max-height: 0; overflow: hidden; opacity: 0; margin: 0;
+  font-size: 14px; line-height: 1.55; color: rgba(255, 255, 255, 0.85);
+  transition: max-height 0.6s var(--ease), opacity 0.4s, margin 0.4s;
+}
+.card:hover .desc, .card:focus-visible .desc { max-height: 120px; opacity: 1; margin-top: 10px; }
+.more { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; padding-bottom: 2px; border-bottom: 1px solid var(--gold); font-size: 13px; font-weight: 600; }
+.badge { position: absolute; top: 18px; left: 18px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--gold); color: var(--navy-900); font-size: 12px; font-weight: 700; letter-spacing: 0.04em; }
+
+/* Large and wide tiles always show the description */
+.large .name { font-size: clamp(34px, 3.5vw, 48px); }
+.large .desc, .wide .desc { max-height: 120px; opacity: 1; margin-top: 12px; max-width: 460px; font-size: 15px; }
+
+@media (max-width: 600px) {
+  .card { grid-column: auto !important; grid-row: auto !important; }
+  .desc { max-height: 120px; opacity: 1; margin-top: 8px; }
+  .large .name { font-size: 34px; }
+}

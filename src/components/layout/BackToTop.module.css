@@ -1,0 +1,9 @@
+.toTop {
+  position: fixed; right: 22px; bottom: 22px; z-index: 90; width: 50px; height: 50px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--gold); color: var(--navy-900);
+  box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.35);
+  opacity: 0; visibility: hidden; transform: translateY(12px); transition: all 0.35s var(--ease);
+}
+.visible { opacity: 1; visibility: visible; transform: none; }
+.toTop:hover { background: var(--gold-hover); }
+@media (max-width: 600px) { .toTop { right: 16px; bottom: 16px; } }

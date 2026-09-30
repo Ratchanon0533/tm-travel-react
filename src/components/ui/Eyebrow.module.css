@@ -1,0 +1,7 @@
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 0.6em; margin: 0 0 18px;
+  font-size: 13px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--navy);
+}
+.mark { color: var(--gold); }
+.light { color: var(--gold); }
+:global(:root:not(:lang(en))) .eyebrow { letter-spacing: 0.08em; }
