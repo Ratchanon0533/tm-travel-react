@@ -11,9 +11,10 @@ export const site = {
   legalNameJa: "株式会社TMトラベル",
   taglineJa: "旅で 人を つなぐ",
 
-  phone: "+81 89-989-5578",
-  phoneHref: "tel:+81899895578",
-  address: ["1-8-46 Misawa, Matsuyama,", "Ehime 791-8022, Japan"],
+  /** Placeholder contact details — replace with the real ones before going live (the number also appears in "cta.call" in src/i18n) */
+  phone: "+81 00-0000-0000",
+  phoneHref: "tel:+810000000000",
+  address: ["1-2-3 Sample-cho, Matsuyama,", "Ehime 000-0000, Japan"],
   japaneseSiteUrl: "https://tm-travel.co.jp/",
 
   logo: {
