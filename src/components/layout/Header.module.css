@@ -35,9 +35,9 @@
   transition: transform 0.45s var(--ease), width 0.35s var(--ease), opacity 0.2s, background 0.3s;
 }
 .burger span:nth-child(1) { top: 15px; }
-.burger span:nth-child(2) { top: 21px; width: 14px; } /* shorter middle line, grows on hover */
+/* Shorter middle line. No hover effect: on phones a tapped button stays "hovered" after closing the menu */
+.burger span:nth-child(2) { top: 21px; width: 14px; }
 .burger span:nth-child(3) { top: 27px; }
-.burger:hover span:nth-child(2) { width: 22px; }
 
 /* Solid (scrolled) state */
 .solid { height: 72px; background: rgba(255, 255, 255, 0.96); backdrop-filter: saturate(1.4) blur(12px); box-shadow: 0 6px 30px -12px rgba(13, 17, 64, 0.25); }
@@ -61,9 +61,12 @@
    * Mobile menu: a navy curtain drops from the top, then the numbered links rise
    * one by one (--i is set per link in Header.jsx).
    * Closing runs in reverse: the links fade out quickly, then the curtain rolls up.
+   * The menu is exactly one screen tall; only the link list scrolls, and only when
+   * the screen is too short for it (e.g. a phone held sideways).
    */
   .nav {
-    position: fixed; inset: 0; z-index: -1; margin: 0; overflow: hidden auto;
+    position: fixed; inset: 0; z-index: -1; margin: 0; overflow: clip;
+    display: flex; flex-direction: column;
     padding: calc(var(--header-h) + 24px) var(--gutter) 36px;
     background: radial-gradient(120% 60% at 100% 100%, rgba(248, 182, 45, 0.1), transparent 60%), var(--navy-900);
     clip-path: inset(0 0 100% 0); visibility: hidden;
@@ -71,7 +74,7 @@
   }
   .navOpen .nav { clip-path: inset(0); visibility: visible; transition: clip-path 0.6s cubic-bezier(0.7, 0, 0.3, 1), visibility 0s; }
 
-  .nav ul { display: block; counter-reset: nav; }
+  .nav ul { display: block; counter-reset: nav; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
   .nav li { counter-increment: nav; overflow: hidden; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
   .nav li a, .solid .nav li a {
     display: flex; align-items: baseline; gap: 18px; padding: 16px 0;
