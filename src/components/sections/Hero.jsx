@@ -35,7 +35,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className={styles.hero} id="top" aria-label={t("hero.tagline") || site.taglineJa} style={{ "--slide-ms": `${site.heroIntervalMs}ms` }}>
+    <section className={styles.hero} id="top" aria-label={t("hero.tagline") || site.taglineJa} style={{ "--slide-ms": `${site.heroIntervalMs}ms`, "--slides": hero.length }}>
       <div className={styles.slides} aria-hidden="true">
         {hero.map((slide, i) => (
           <div key={slide.photo} className={cx(styles.slide, i === index && styles.active)}>
