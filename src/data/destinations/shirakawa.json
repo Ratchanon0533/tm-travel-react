@@ -2,6 +2,7 @@
   "order": 90,
   "id": "shirakawa",
   "photo": "dest-shirakawa",
+  "coords": { "lat": 36.26, "lng": 136.91 },
   "cats": [
     "culture",
     "nature"

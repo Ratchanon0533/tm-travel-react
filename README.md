@@ -1,7 +1,7 @@
 # TM Travel — Inbound Japan Landing Page (React + Vite)
 
 An inbound travel landing page for foreign visitors, based on [tm-travel.co.jp](https://tm-travel.co.jp/).
-Built with React 19 and Vite. Each language is **prerendered** into its own static HTML page, so search engines can index every language.
+Built with React 19 and Vite, with 3D scenes in three.js (React Three Fiber). Each language is **prerendered** into its own static HTML page, so search engines can index every language.
 
 ## Getting started
 
@@ -19,10 +19,12 @@ npm run preview    # preview the production build
 | I want to change… | Edit this file |
 |---|---|
 | Colors, fonts, spacing, corner radius | `src/styles/tokens.css` |
-| Phone, address, logo files, slideshow speed, languages, menu items, site URL | `src/config/site.js` |
+| Phone, address, logo files, map tour speed, languages, menu items, site URL | `src/config/site.js` |
 | Any interface text (headings, buttons, menu labels) | `src/i18n/en.json`, `ja.json`, `th.json`, `zh.json`, `ko.json` |
-| A destination (text, photo, category, order) | `src/data/destinations/<place>.json` |
-| Hero slides | `src/data/hero.json` |
+| A destination (text, photo, category, order, map pin `coords`) | `src/data/destinations/<place>.json` |
+| 3D map look (colors, pins, camera) | `src/components/three/JapanMap.jsx` |
+| Seasonal particles (petals, fireflies, leaves, snow) | `KINDS` in `src/components/three/SeasonParticles.jsx` |
+| Hero photo (only shown in browsers without 3D) | first entry of `src/data/hero.json` |
 | Seasons / Experiences | `src/data/seasons.json`, `src/data/experiences.json` |
 | "Why us" cards / planning steps | `src/data/features.json`, `src/data/steps.json` (text keys live in `src/i18n`) |
 | Destination filter categories | `src/data/filters.json` (labels are `filter.<name>` in `src/i18n`) |
@@ -38,7 +40,8 @@ index.html                      HTML template (placeholders are filled by the pr
 vite.config.js
 scripts/
 ├── prerender.js                Writes dist/index.html, dist/th/index.html, … after the build
-└── download-images.mjs         Optional: download photos locally
+├── download-images.mjs         Optional: download photos locally
+└── build-japan-map.mjs         Makes src/data/japan-map.json (coastline of the 3D map)
 src/
 ├── main.jsx                    Browser entry: hydrates the prerendered page (createRoot in dev)
 ├── entry-server.jsx            Prerender entry: renderToString(<App lang="…" />)
@@ -57,8 +60,10 @@ src/
 │   ├── mosaic.js               Destination grid layout logic
 │   ├── head.js                 <head> tags per language (SEO, hreflang, fonts)
 │   └── cx.js                   className joiner
-├── hooks/                      useScrolled, useMediaQuery, useReveal, useDocumentHead
+├── hooks/                      useScrolled, useMediaQuery, useReveal, useDocumentHead,
+│                               use3D, useInView, useTilt
 └── components/
+    ├── three/                  JapanMap (hero), SeasonParticles — 3D, loaded only when shown
     ├── ui/                     Icon, Button, Eyebrow, SectionHeading
     ├── layout/                 Header, LanguageSwitcher, Footer, BackToTop
     ├── sections/               Hero, Intro, Destinations, Seasons, Experiences, CallToAction
@@ -94,9 +99,19 @@ In `ja.json`, `hero.tagline` and `footer.tagline` are intentionally empty. The b
 
 In the browser, `main.jsx` hydrates that HTML, so the page is readable before JavaScript loads and interactive after. Keep the first render identical on server and client: read browser-only values such as `window` or the current date inside `useEffect`, as `Seasons.jsx` and the hooks do.
 
+## How the 3D works
+
+The 3D parts sit on top of the normal page. All text stays in the HTML, so search engines, translations and screen readers work as before.
+
+- **Hero map** (`components/three/JapanMap.jsx`): a 3D map of Japan with a pin for each destination (`coords` in its JSON file) and gold routes from the destination marked `"home": true`. The camera tours the pins; visitors can click a pin or a bar under the hero. The coastline comes from Natural Earth (public domain) and is made by `node scripts/build-japan-map.mjs`.
+- **Seasonal particles** (`components/three/SeasonParticles.jsx`): petals, fireflies, maple leaves or snow over the Seasons panels, matching the open season.
+- **Tilting cards** (`hooks/useTilt.js`): destination and experience cards lean toward the mouse. CSS only, no three.js.
+
+The 3D code (~250 kB gzipped) downloads only after the page is visible and only in browsers with WebGL (`hooks/use3D.js`); other browsers show the first photo from `hero.json`. Scenes pause when scrolled off screen or when the tab is hidden, and visitors who ask for reduced motion get a still map and no particles.
+
 ## Common tasks
 
-**Add a destination.** Copy `src/data/destinations/nara.json` to a new file and edit it. Then add its photo to `src/data/photos.json`. The Unsplash ID is the part after `photo-` in an image URL.
+**Add a destination.** Copy `src/data/destinations/nara.json` to a new file and edit it, including `coords` (latitude/longitude, e.g. from Google Maps) for its pin on the 3D map. Then add its photo to `src/data/photos.json`. The Unsplash ID is the part after `photo-` in an image URL.
 
 **Hide a destination** without deleting it: add `"hidden": true` to its file.
 

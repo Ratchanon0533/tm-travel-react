@@ -2,6 +2,7 @@
   "order": 70,
   "id": "okinawa",
   "photo": "dest-okinawa",
+  "coords": { "lat": 26.21, "lng": 127.68 },
   "cats": [
     "coast",
     "nature"

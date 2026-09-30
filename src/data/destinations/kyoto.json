@@ -2,6 +2,7 @@
   "order": 20,
   "id": "kyoto",
   "photo": "dest-kyoto",
+  "coords": { "lat": 35.01, "lng": 135.77 },
   "cats": [
     "culture",
     "city"

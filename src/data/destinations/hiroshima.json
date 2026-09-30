@@ -2,6 +2,7 @@
   "order": 60,
   "id": "hiroshima",
   "photo": "dest-hiroshima",
+  "coords": { "lat": 34.39, "lng": 132.46 },
   "cats": [
     "culture",
     "coast"

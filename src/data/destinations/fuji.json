@@ -2,6 +2,7 @@
   "order": 30,
   "id": "fuji",
   "photo": "dest-fuji",
+  "coords": { "lat": 35.36, "lng": 138.73 },
   "cats": [
     "nature"
   ],

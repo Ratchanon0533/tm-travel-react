@@ -1,0 +1,2 @@
+/* Covers the season panels; clicks and hovers pass straight through to them */
+.fx { position: absolute; inset: 0; z-index: 2; pointer-events: none; }

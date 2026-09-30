@@ -2,6 +2,7 @@
   "order": 50,
   "id": "hokkaido",
   "photo": "dest-hokkaido",
+  "coords": { "lat": 43.06, "lng": 141.35 },
   "cats": [
     "nature"
   ],

@@ -24,7 +24,7 @@ export const site = {
     height: 75,
   },
 
-  /** Hero slideshow: milliseconds per slide */
+  /** Hero 3D map tour: milliseconds per destination */
   heroIntervalMs: 7000,
 
   /**

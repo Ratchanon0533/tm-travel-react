@@ -2,10 +2,11 @@ import Icon from "../ui/Icon.jsx";
 import { useI18n } from "../../lib/i18n.jsx";
 import { photoUrl, photoSrcset } from "../../lib/images.js";
 import { cx } from "../../lib/cx.js";
+import { useTilt } from "../../hooks/useTilt.js";
 import styles from "./DestinationCard.module.css";
 
 /**
- * One destination tile.
+ * One destination tile (tilts toward the mouse).
  * Props: destination (src/data/destinations/*.json), span [cols, rows], index (entrance delay), onOpen
  */
 export default function DestinationCard({ destination: d, span = [1, 1], index = 0, onOpen }) {
@@ -13,9 +14,11 @@ export default function DestinationCard({ destination: d, span = [1, 1], index =
   const [cols, rows] = span;
   const large = cols === 2 && rows === 2;
   const wide = cols >= 2 && rows === 1;
+  const tilt = useTilt(large ? 4 : 6);
 
   return (
     <button
+      ref={tilt}
       type="button"
       className={cx(styles.card, large && styles.large, wide && styles.wide)}
       style={{ gridColumn: `span ${cols}`, gridRow: `span ${rows}`, animationDelay: `${index * 60}ms` }}

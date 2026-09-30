@@ -2,6 +2,7 @@
   "order": 40,
   "id": "osaka",
   "photo": "dest-osaka",
+  "coords": { "lat": 34.69, "lng": 135.50 },
   "cats": [
     "city"
   ],

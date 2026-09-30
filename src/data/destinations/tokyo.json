@@ -2,6 +2,7 @@
   "order": 10,
   "id": "tokyo",
   "photo": "dest-tokyo",
+  "coords": { "lat": 35.68, "lng": 139.77 },
   "cats": [
     "city",
     "culture"

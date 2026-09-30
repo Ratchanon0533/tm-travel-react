@@ -2,6 +2,7 @@
   "order": 100,
   "id": "shikoku",
   "photo": "dest-shikoku",
+  "coords": { "lat": 33.84, "lng": 132.77 },
   "cats": [
     "culture",
     "coast",

@@ -2,6 +2,7 @@
   "order": 80,
   "id": "nara",
   "photo": "dest-nara",
+  "coords": { "lat": 34.69, "lng": 135.83 },
   "cats": [
     "culture"
   ],

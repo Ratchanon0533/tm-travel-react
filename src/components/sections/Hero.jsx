@@ -1,31 +1,47 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Button from "../ui/Button.jsx";
 import { site } from "../../config/site.js";
-import { hero } from "../../lib/content.js";
+import { destinations, hero } from "../../lib/content.js";
 import { useI18n } from "../../lib/i18n.jsx";
 import { photoUrl, photoSrcset } from "../../lib/images.js";
 import { usePrefersReducedMotion } from "../../hooks/useMediaQuery.js";
+import { use3D } from "../../hooks/use3D.js";
+import { useInView } from "../../hooks/useInView.js";
 import { cx } from "../../lib/cx.js";
 import styles from "./Hero.module.css";
 
-const WIDTHS = [960, 1440, 1920, 2560];
+// The 3D map (three.js) is downloaded only by browsers that can show it, after the page is visible
+const JapanMap = lazy(() => import("../three/JapanMap.jsx"));
+
+const OVERVIEW = -1; // tour position before the first destination
+const OVERVIEW_MS = 3000;
 
 /**
- * Full-screen hero with a cross-fading, slowly zooming photo slideshow.
- * Slides: src/data/hero.json · speed: site.heroIntervalMs
+ * Full-screen hero over a 3D map of Japan that tours the destinations
+ * (pins: "coords" in src/data/destinations/*.json · speed: site.heroIntervalMs).
+ * Browsers without WebGL see the first photo from src/data/hero.json instead.
  */
 export default function Hero() {
   const { t, tx } = useI18n();
-  const [index, setIndex] = useState(0);
+  const ref = useRef(null);
+  const [index, setIndex] = useState(OVERVIEW);
   const [paused, setPaused] = useState(false);
   const reduceMotion = usePrefersReducedMotion();
+  const has3D = use3D();
+  const inView = useInView(ref);
+  const running = inView && !paused;
 
-  // Auto-advance (restarts whenever the slide changes, so clicking a dot resets the timer)
+  const tour = useMemo(
+    () => destinations.filter((d) => d.coords).map((d) => ({ id: d.id, coords: d.coords, home: Boolean(d.home), name: tx(d.name), region: tx(d.region) })),
+    [tx],
+  );
+
+  // Auto-advance (restarts whenever the stop changes, so clicking a bar or pin resets the timer)
   useEffect(() => {
-    if (reduceMotion || paused) return;
-    const id = setTimeout(() => setIndex((i) => (i + 1) % hero.length), site.heroIntervalMs);
+    if (!has3D || reduceMotion || !running) return;
+    const id = setTimeout(() => setIndex((i) => (i + 1) % tour.length), index === OVERVIEW ? OVERVIEW_MS : site.heroIntervalMs);
     return () => clearTimeout(id);
-  }, [index, reduceMotion, paused]);
+  }, [index, has3D, reduceMotion, running, tour.length]);
 
   // Pause while the tab is hidden
   useEffect(() => {
@@ -34,22 +50,19 @@ export default function Hero() {
     return () => document.removeEventListener("visibilitychange", onVis);
   }, []);
 
+  const stop = tour[index];
+
   return (
-    <section className={styles.hero} id="top" aria-label={t("hero.tagline") || site.taglineJa} style={{ "--slide-ms": `${site.heroIntervalMs}ms`, "--slides": hero.length }}>
-      <div className={styles.slides} aria-hidden="true">
-        {hero.map((slide, i) => (
-          <div key={slide.photo} className={cx(styles.slide, i === index && styles.active)}>
-            <img
-              src={photoUrl(slide.photo, 1920)}
-              srcSet={photoSrcset(slide.photo, WIDTHS)}
-              sizes="100vw"
-              alt=""
-              loading={i === 0 ? "eager" : "lazy"}
-              fetchPriority={i === 0 ? "high" : "low"}
-              decoding="async"
-            />
-          </div>
-        ))}
+    <section ref={ref} className={cx(styles.hero, !running && styles.paused)} id="top" aria-label={t("hero.tagline") || site.taglineJa} style={{ "--slide-ms": `${site.heroIntervalMs}ms` }}>
+      <div className={styles.stage} aria-hidden="true">
+        {has3D && (
+          <Suspense fallback={null}>
+            <JapanMap places={tour} active={index} onSelect={setIndex} running={running} still={reduceMotion} homeLabel={t("dest.home")} />
+          </Suspense>
+        )}
+        {has3D === false && (
+          <img className={styles.poster} src={photoUrl(hero[0].photo, 1920)} srcSet={photoSrcset(hero[0].photo, [960, 1440, 1920, 2560])} sizes="100vw" alt="" decoding="async" />
+        )}
       </div>
       <div className={styles.overlay} />
 
@@ -73,22 +86,36 @@ export default function Hero() {
       </div>
 
       <div className={cx("container", styles.bottom)}>
-        <div className={styles.dots} role="tablist" aria-label="Slides">
-          {hero.map((slide, i) => (
-            <button
-              key={slide.photo}
-              className={cx(styles.dot, i === index && styles.dotActive, i < index && styles.dotDone)}
-              type="button"
-              role="tab"
-              aria-selected={i === index}
-              onClick={() => setIndex(i)}
-            >
-              {/* key changes on every slide so the progress animation restarts */}
-              <i key={i === index ? `active-${index}` : "idle"} />
-              <span>{tx(slide.caption)}</span>
-            </button>
-          ))}
-        </div>
+        {has3D && (
+          <div className={styles.tour}>
+            <p className={styles.stop} aria-live="polite">
+              {stop ? (
+                <>
+                  <em>{String(index + 1).padStart(2, "0")}</em>
+                  <strong>{stop.name}</strong>
+                  <span>{stop.region}</span>
+                </>
+              ) : (
+                <span>{t("hero.mapHint")}</span>
+              )}
+            </p>
+            <div className={styles.bars}>
+              {tour.map((d, i) => (
+                <button
+                  key={d.id}
+                  className={cx(styles.bar, i === index && styles.barActive, i < index && styles.barDone)}
+                  type="button"
+                  aria-label={d.name}
+                  aria-current={i === index ? "true" : undefined}
+                  onClick={() => setIndex(i)}
+                >
+                  {/* key changes on every stop so the progress animation restarts */}
+                  <i key={i === index ? `active-${index}` : "idle"} />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         <a className={styles.scroll} href="#about"><span>{t("hero.scroll")}</span><i /></a>
       </div>
     </section>

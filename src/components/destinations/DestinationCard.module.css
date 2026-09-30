@@ -1,9 +1,17 @@
 .card {
   position: relative; isolation: isolate; display: block; width: 100%; height: 100%; overflow: hidden;
   border-radius: var(--radius-lg); background: var(--navy-900); color: #fff; text-align: left; cursor: pointer;
-  animation: cardIn 0.7s var(--ease) both;
+  animation: cardIn 0.7s var(--ease) backwards; /* "backwards", so it doesn't hold on to transform afterwards */
+  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.5s var(--ease);
 }
 @keyframes cardIn { from { opacity: 0; transform: translateY(24px); } }
+/* Soft glare that follows the mouse (--gx / --gy come from useTilt) */
+.card::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255, 255, 255, 0.22), transparent 55%);
+}
+.card:hover::before { opacity: 1; }
 
 .card img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
 .card::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(8, 11, 44, 0.9) 0%, rgba(8, 11, 44, 0.25) 50%, rgba(8, 11, 44, 0) 75%); transition: background 0.5s; }

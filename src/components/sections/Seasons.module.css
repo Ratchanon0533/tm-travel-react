@@ -1,4 +1,4 @@
 .seasons { background: var(--sand); }
 /* container-type lets SeasonPanel size its text from this row's width (cqw units) */
-.panels { --gap: 14px; display: flex; gap: var(--gap); height: 540px; container-type: inline-size; }
+.panels { --gap: 14px; position: relative; display: flex; gap: var(--gap); height: 540px; container-type: inline-size; }
 @media (max-width: 900px) { .panels { flex-direction: column; height: auto; } }
