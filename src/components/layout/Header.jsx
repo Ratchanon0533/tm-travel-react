@@ -46,15 +46,30 @@ export default function Header() {
     return () => window.removeEventListener("resize", onResize);
   }, [navOpen]);
 
-  // Highlight the nav link of the section in view
+  // Track the section in view (none over the hero): it highlights its nav link, tells the language
+  // switcher where the visitor is, and becomes the #section in the address bar — so a reload returns
+  // to where the visitor is now, not to the last link they clicked. The address bar is left alone until
+  // the page has loaded, while the browser may still be scrolling to the #section it was opened with.
   useEffect(() => {
     if (!("IntersectionObserver" in window)) return;
+    let loaded = document.readyState === "complete";
+    const onLoad = () => { loaded = true; };
+    window.addEventListener("load", onLoad);
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setActiveHref("#" + e.target.id)),
+      (entries) => entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const hash = e.target.id === "top" ? "" : "#" + e.target.id;
+        setActiveHref(hash || null);
+        const { pathname, search } = window.location;
+        if (loaded && window.location.hash !== hash) history.replaceState(history.state, "", pathname + search + hash);
+      }),
       { rootMargin: "-45% 0px -50% 0px" },
     );
-    navigation.forEach(({ href }) => { const el = document.querySelector(href); if (el) io.observe(el); });
-    return () => io.disconnect();
+    ["#top", ...navigation.map((item) => item.href)].forEach((href) => { const el = document.querySelector(href); if (el) io.observe(el); });
+    return () => {
+      io.disconnect();
+      window.removeEventListener("load", onLoad);
+    };
   }, []);
 
   const solid = scrolled && !navOpen;
@@ -83,7 +98,7 @@ export default function Header() {
         </nav>
 
         <div className={styles.actions}>
-          <LanguageSwitcher dark={solid} />
+          <LanguageSwitcher dark={solid} section={activeHref} />
           <Button href="#contact" size="sm" className={styles.cta}>{t("nav.plan")}</Button>
           <button className={styles.burger} type="button" aria-label="Menu" aria-controls="mainNav" aria-expanded={navOpen} onClick={() => setNavOpen((o) => !o)}>
             <span /><span /><span />

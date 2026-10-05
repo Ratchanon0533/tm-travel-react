@@ -9,8 +9,9 @@ import styles from "./LanguageSwitcher.module.css";
 /**
  * Language dropdown. Each language is its own page ("/", "/th/", "/zh/", "/ko/").
  * `dark` = navy text for the white (scrolled) header.
+ * `section` = "#id" of the section in view (null over the hero); the new language opens there.
  */
-export default function LanguageSwitcher({ dark = false }) {
+export default function LanguageSwitcher({ dark = false, section = null }) {
   const { lang, t } = useI18n();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -24,10 +25,10 @@ export default function LanguageSwitcher({ dark = false }) {
     return () => { document.removeEventListener("click", onClick); document.removeEventListener("keydown", onKey); };
   }, [open]);
 
-  // Keep the visitor on the same section when switching language
+  // Keep the visitor on the section they are looking at — not the last #link they clicked
   const onPick = (e, code) => {
     try { localStorage.setItem("tm-lang", code); } catch { /* storage unavailable */ }
-    if (window.location.hash) e.currentTarget.href = localizedHome(code) + window.location.hash;
+    e.currentTarget.href = localizedHome(code) + (section ?? "");
   };
 
   return (
