@@ -1,0 +1,76 @@
+{
+  "order": 92,
+  "id": "nikko",
+  "photo": "dest-nikko",
+  "cats": [
+    "culture",
+    "nature"
+  ],
+  "region": {
+    "en": "Tochigi",
+    "th": "โทชิงิ",
+    "zh": "栃木",
+    "ko": "도치기",
+    "ja": "栃木"
+  },
+  "name": {
+    "en": "Nikko",
+    "th": "นิกโก",
+    "zh": "日光",
+    "ko": "닛코",
+    "ja": "日光"
+  },
+  "desc": {
+    "en": "Lavishly carved shrines in ancient cedar forests, a sacred red bridge, and mountain lakes and waterfalls that blaze with autumn color.",
+    "th": "ศาลเจ้าแกะสลักวิจิตรท่ามกลางป่าสนซีดาร์โบราณ สะพานแดงศักดิ์สิทธิ์ ทะเลสาบและน้ำตกบนภูเขาที่ลุกโชนด้วยสีใบไม้ร่วง",
+    "zh": "古杉林中雕饰华美的神社、神圣的朱红神桥，以及秋日红叶如火的高山湖泊与瀑布。",
+    "ko": "오래된 삼나무 숲 속 화려한 조각의 신사, 신성한 붉은 다리, 그리고 단풍으로 물드는 산속 호수와 폭포.",
+    "ja": "杉木立に囲まれた絢爛豪華な社殿、朱塗りの神橋、紅葉に染まる湖と滝。"
+  },
+  "highlights": {
+    "en": [
+      "Nikko Toshogu Shrine (UNESCO World Heritage)",
+      "The vermilion Shinkyo Bridge",
+      "Kegon Falls & Lake Chuzenji",
+      "Autumn colors along the Irohazaka road"
+    ],
+    "th": [
+      "ศาลเจ้านิกโกโทโชกู (มรดกโลกยูเนสโก)",
+      "สะพานชินเคียวสีแดงชาด",
+      "น้ำตกเคกอนและทะเลสาบชูเซ็นจิ",
+      "ใบไม้เปลี่ยนสีบนถนนอิโรฮะซากะ"
+    ],
+    "zh": [
+      "日光东照宫（世界遗产）",
+      "朱红色的神桥",
+      "华严瀑布与中禅寺湖",
+      "伊吕波山道的红叶"
+    ],
+    "ko": [
+      "닛코 도쇼구 (유네스코 세계유산)",
+      "주홍빛 신쿄 다리",
+      "게곤 폭포와 주젠지 호수",
+      "이로하자카 길의 단풍"
+    ],
+    "ja": [
+      "日光東照宮（世界遺産）",
+      "朱塗りの神橋",
+      "華厳滝と中禅寺湖",
+      "いろは坂の紅葉"
+    ]
+  },
+  "best": {
+    "en": "May–June, October–early November",
+    "th": "พ.ค.–มิ.ย., ต.ค.–ต้น พ.ย.",
+    "zh": "5–6月、10月–11月上旬",
+    "ko": "5~6월, 10월~11월 초",
+    "ja": "5〜6月、10月〜11月上旬"
+  },
+  "access": {
+    "en": "About 2 hours from Tokyo by limited express train",
+    "th": "ประมาณ 2 ชั่วโมงจากโตเกียวด้วยรถไฟด่วนพิเศษ",
+    "zh": "从东京乘特急列车约2小时",
+    "ko": "도쿄에서 특급열차로 약 2시간",
+    "ja": "東京から特急で約2時間"
+  }
+}

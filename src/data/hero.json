@@ -30,6 +30,26 @@
     }
   },
   {
+    "photo": "hero-himeji",
+    "caption": {
+      "en": "Himeji Castle",
+      "th": "ปราสาทฮิเมจิ",
+      "zh": "姬路城",
+      "ko": "히메지성",
+      "ja": "姫路城"
+    }
+  },
+  {
+    "photo": "hero-biei",
+    "caption": {
+      "en": "Blue Pond, Biei",
+      "th": "บ่อน้ำสีฟ้า บิเอ",
+      "zh": "美瑛·青池",
+      "ko": "비에이 청의 호수",
+      "ja": "美瑛・青い池"
+    }
+  },
+  {
     "photo": "hero-shirakawa",
     "caption": {
       "en": "Shirakawa-go in Winter",
@@ -37,6 +57,16 @@
       "zh": "冬日白川乡",
       "ko": "겨울의 시라카와고",
       "ja": "冬の白川郷"
+    }
+  },
+  {
+    "photo": "hero-miyajima",
+    "caption": {
+      "en": "Miyajima, Hiroshima",
+      "th": "มิยาจิมะ ฮิโรชิมะ",
+      "zh": "广岛·宫岛",
+      "ko": "히로시마 미야지마",
+      "ja": "広島・宮島"
     }
   },
   {

@@ -45,9 +45,9 @@
 
 /* Slide indicators */
 .bottom { position: absolute; left: 0; right: 0; bottom: 34px; z-index: 3; display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
-.dots { display: flex; gap: 26px; flex: 1; max-width: calc(var(--slides, 4) * 190px); } /* room for each caption */
+.dots { display: flex; gap: 20px; flex: 1; max-width: calc(var(--slides, 4) * 190px); } /* room for each caption */
 .dot { position: relative; flex: 1; min-width: 0; padding-top: 14px; text-align: left; font-size: 13px; color: rgba(255, 255, 255, 0.6); transition: color 0.3s; }
-.dot span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dot span { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; line-height: 1.35; } /* captions wrap to two lines */
 .dot::before, .dot i { content: ""; position: absolute; left: 0; top: 0; height: 2px; }
 .dot::before { right: 0; background: rgba(255, 255, 255, 0.28); }
 .dot i { width: 0; background: var(--gold); }

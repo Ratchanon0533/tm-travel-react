@@ -19,6 +19,18 @@
     "id": "1774705809362-a74a577350d5",
     "by": "urusy"
   },
+  "hero-himeji": {
+    "id": "1642526559580-e4405252d9d3",
+    "by": "Holger Woizick"
+  },
+  "hero-biei": {
+    "id": "1539430416000-065144bb6a86",
+    "by": "Georgios Kaleadis"
+  },
+  "hero-miyajima": {
+    "id": "1658168096961-fa302cd67aa1",
+    "by": "Björn"
+  },
   "dest-tokyo": {
     "id": "1604928141064-207cea6f571f",
     "by": "Takashi Miyazaki"
@@ -58,6 +70,34 @@
   "dest-shikoku": {
     "id": "1561452978-c300afce7342",
     "by": "Pavlo Klein"
+  },
+  "dest-kanazawa": {
+    "id": "1669380981740-18db28620b8b",
+    "by": "Ikko Nishimura"
+  },
+  "dest-nikko": {
+    "id": "1509627932803-816959283f1d",
+    "by": "Lyndon Li"
+  },
+  "dest-kamakura": {
+    "id": "1462566391470-7fc19697a158",
+    "by": "charlesdeluvio"
+  },
+  "dest-himeji": {
+    "id": "1573416033034-e42e14b545d2",
+    "by": "Svetlana Gumerova"
+  },
+  "dest-naoshima": {
+    "id": "1732234009493-aec357977329",
+    "by": "Rebecca Lam"
+  },
+  "dest-beppu": {
+    "id": "1706334345372-659f20e9bbe8",
+    "by": "Kouji Tsuru"
+  },
+  "dest-ginzan": {
+    "id": "1646132792277-9127ac4854e4",
+    "by": "Shino Nakamura"
   },
   "season-spring": {
     "id": "1524413840807-0c3cb6fa808d",
