@@ -75,5 +75,7 @@
   "footer.credits": "写真クレジット",
   "footer.creditsNote": "写真提供：Unsplash",
   "backTop": "ページの先頭へ",
-  "modal.close": "閉じる"
+  "modal.close": "閉じる",
+  "modal.prev": "前の旅先",
+  "modal.next": "次の旅先"
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../ui/Button.jsx";
 import LanguageSwitcher from "./LanguageSwitcher.jsx";
 import { site, navigation } from "../../config/site.js";
@@ -10,13 +10,33 @@ import styles from "./Header.module.css";
 
 /**
  * Fixed header: transparent over the hero (white logo), solid white after scrolling (color logo).
- * Includes the main nav, language switcher, CTA button and mobile menu (a curtain that drops from the top).
+ * Includes the main nav, language switcher, CTA button, mobile menu (a curtain that drops from the top)
+ * and a thin gold bar along the bottom showing how far down the page you are.
  */
 export default function Header() {
   const { lang, t } = useI18n();
   const scrolled = useScrolled(60);
   const [navOpen, setNavOpen] = useState(false);
   const [activeHref, setActiveHref] = useState(null);
+  const progress = useRef(null);
+
+  // Reading progress: scale the gold bar with the scroll position
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progress.current.style.transform = `scaleX(${max > 0 ? Math.min(window.scrollY / max, 1) : 0})`;
+    };
+    const onScroll = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
 
   // Lock page scroll while the mobile menu is open; close it when resizing to desktop
   useEffect(() => {
@@ -70,6 +90,7 @@ export default function Header() {
           </button>
         </div>
       </div>
+      <span ref={progress} className={styles.progress} aria-hidden="true" />
     </header>
   );
 }

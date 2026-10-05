@@ -6,5 +6,9 @@
 :global(:root:not(:lang(en))) .title { font-size: clamp(28px, 3.8vw, 46px); line-height: 1.3; }
 .lead { margin-bottom: 34px; color: rgba(255, 255, 255, 0.85); }
 .buttons { display: flex; flex-wrap: wrap; gap: 14px; }
-.steps { display: grid; gap: 16px; }
+/* Steps on a timeline: a faint track down the left, filled in gold up to --fill (CallToAction.jsx sets --track / --fill) */
+.steps { position: relative; display: grid; gap: 16px; padding-left: 36px; }
+.steps::before, .steps::after { content: ""; position: absolute; left: 11px; top: 40px; width: 2px; height: var(--track, 0); border-radius: 2px; }
+.steps::before { background: rgba(255, 255, 255, 0.2); }
+.steps::after { background: var(--gold); box-shadow: 0 0 12px rgba(248, 182, 45, 0.6); transform: scaleY(var(--fill, 0)); transform-origin: top; transition: transform 0.25s linear; }
 @media (max-width: 900px) { .inner { grid-template-columns: 1fr; } }

@@ -2,7 +2,11 @@
   padding: 30px 26px; border-radius: var(--radius-lg); background: #fff; border: 1px solid var(--line);
   transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), opacity 1s var(--ease);
 }
-.feature:hover { box-shadow: var(--shadow); }
-.icon { display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 20px; border-radius: 14px; background: var(--navy); color: var(--gold); }
+.feature:hover { box-shadow: var(--shadow); transform: translateY(-6px); }
+.icon {
+  display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 20px; border-radius: 14px; background: var(--navy); color: var(--gold);
+  transition: background 0.4s, color 0.4s, transform 0.5s var(--ease);
+}
+.feature:hover .icon { background: var(--gold); color: var(--navy); transform: rotate(-8deg) scale(1.08); }
 .feature h3 { margin-bottom: 8px; font-family: var(--font-body); font-size: 17px; font-weight: 700; color: var(--navy); }
 .feature p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--muted); }

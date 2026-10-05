@@ -29,6 +29,9 @@ export default function Destinations() {
 
   const visible = destinations.filter((d) => filter === "all" || d.cats.includes(filter));
   const spans = mosaicSpans(visible.length, cols);
+  // the popup can browse through the places currently shown
+  const at = selected ? visible.indexOf(selected) : -1;
+  const browse = (step) => setSelected(visible[(at + step + visible.length) % visible.length]);
 
   return (
     <section className={`section ${styles.destinations}`} id="destinations">
@@ -42,7 +45,7 @@ export default function Destinations() {
           ))}
         </div>
       </div>
-      <DestinationModal destination={selected} onClose={() => setSelected(null)} />
+      <DestinationModal destination={selected} position={at >= 0 ? [at + 1, visible.length] : null} onBrowse={browse} onClose={() => setSelected(null)} />
     </section>
   );
 }

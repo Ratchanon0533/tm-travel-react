@@ -47,6 +47,13 @@
 .solid .tagline, .solid .nav li a { color: var(--navy); }
 .solid .burger span { background: var(--navy); }
 
+/* Reading progress (width set by Header.jsx); shown once the header turns solid */
+.progress {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--gold);
+  transform: scaleX(0); transform-origin: left; opacity: 0; transition: opacity 0.4s;
+}
+.solid .progress { opacity: 1; }
+
 @media (max-width: 1100px) {
   .nav ul { gap: 22px; }
   .cta { display: none; }
