@@ -1,7 +1,14 @@
 .season { --open: 3.4; position: relative; isolation: isolate; flex: 1; min-width: 0; overflow: hidden; border-radius: var(--radius-lg); color: #fff; cursor: pointer; transition: flex 0.8s var(--ease); }
 .season.active { flex: var(--open); }
-.season img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
-.season:hover img { transform: scale(1.05); }
+/* Slideshow: photos cross-fade; the one showing zooms in slowly while the panel is open. A hidden photo
+   keeps its zoom until it has faded out, then resets. */
+.season img {
+  position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transform: scale(1.02); transition: opacity 1.2s ease, transform 0s 1.2s;
+}
+.season img.current { opacity: 1; transition: opacity 1.2s ease, transform 1.2s var(--ease); }
+.season:not(.active):hover img.current { transform: scale(1.05); }
+.active img.current { transform: scale(1.1); transition: opacity 1.2s ease, transform 8s linear; }
 .season::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(8, 11, 44, 0.88), rgba(8, 11, 44, 0.15) 65%); }
 
 .kanji { position: absolute; top: 22px; left: 22px; font-family: var(--font-jp); font-size: 40px; font-weight: 700; line-height: 1; text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3); }
@@ -14,6 +21,16 @@
 /* In Japanese the label would repeat the kanji shown at the top */
 :global(:root:lang(ja)) .label { display: none; }
 .active .label { opacity: 0; transition: opacity 0.15s; }
+
+/* Name of the place in the photo (top right, open panel only) */
+.place {
+  position: absolute; top: 24px; right: 24px; max-width: calc(100% - 110px); display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 13px; border-radius: 999px; background: rgba(8, 11, 44, 0.5); backdrop-filter: blur(8px);
+  font-size: 13px; font-weight: 600; letter-spacing: 0.03em; white-space: nowrap; opacity: 0; transition: opacity 0.2s;
+}
+.place :global(.icon) { flex: none; color: var(--gold); }
+.active .place { opacity: 1; animation: placeIn 0.7s var(--ease) 0.3s backwards; }
+@keyframes placeIn { from { opacity: 0; transform: translateY(-6px); } }
 
 /*
  * The text always has the open panel's width (4 panels: 3 × flex 1 + 1 × flex --open, 3 gaps),
@@ -30,9 +47,24 @@
 .content p { max-width: 520px; font-size: 15.5px; color: rgba(255, 255, 255, 0.88); }
 .tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .tags li { padding: 6px 13px; border-radius: 999px; font-size: 13px; background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.25); backdrop-filter: blur(6px); }
+/* one bar per photo; the current one fills up until the next photo */
+.bars { display: flex; gap: 6px; max-width: 240px; margin-top: 22px; }
+.active .bars { pointer-events: auto; }
+.bar { position: relative; flex: 1; height: 16px; }
+.bar::before, .bar i { content: ""; position: absolute; left: 0; top: 7px; height: 2px; border-radius: 2px; }
+.bar::before { right: 0; background: rgba(255, 255, 255, 0.3); transition: background 0.3s; }
+.bar:hover::before { background: rgba(255, 255, 255, 0.6); }
+.bar i { width: 0; background: var(--gold); }
+.barOn i { width: 100%; }
+.active .barOn i { width: 0; animation: fill var(--slide-ms) linear forwards; }
+@keyframes fill { to { width: 100%; } }
 
 @media (max-width: 900px) {
-  .season, .season.active { flex: none; height: 380px; }
+  /* stacked cards grow with their text, which sits below the kanji and place name */
+  .season, .season.active { flex: none; display: flex; flex-direction: column; justify-content: flex-end; min-height: 380px; }
   .label { display: none; }
-  .content { width: auto; right: 0; opacity: 1; transform: none; padding: 26px; }
+  .content { position: relative; width: auto; opacity: 1; transform: none; padding: 86px 26px 26px; }
+  .place { opacity: 1; top: 22px; right: 18px; }
+  .bars { pointer-events: auto; margin-top: 16px; }
 }
+@media (prefers-reduced-motion: reduce) { .active img.current { transform: scale(1.02); } }

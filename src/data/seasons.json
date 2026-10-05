@@ -1,7 +1,48 @@
 [
   {
     "id": "spring",
-    "photo": "season-spring",
+    "slides": [
+      {
+        "photo": "season-spring",
+        "place": {
+          "en": "Meguro River, Tokyo",
+          "th": "แม่น้ำเมงุโระ โตเกียว",
+          "zh": "东京·目黑川",
+          "ko": "도쿄 메구로강",
+          "ja": "東京・目黒川"
+        }
+      },
+      {
+        "photo": "season-spring-osaka",
+        "place": {
+          "en": "Osaka Castle",
+          "th": "ปราสาทโอซาก้า",
+          "zh": "大阪城",
+          "ko": "오사카성",
+          "ja": "大阪城"
+        }
+      },
+      {
+        "photo": "season-spring-hitachi",
+        "place": {
+          "en": "Hitachi Seaside Park, Ibaraki",
+          "th": "สวนฮิตาชิซีไซด์ อิบารากิ",
+          "zh": "茨城·国营常陆海滨公园",
+          "ko": "이바라키 히타치 해변공원",
+          "ja": "茨城・国営ひたち海浜公園"
+        }
+      },
+      {
+        "photo": "season-spring-kyoto",
+        "place": {
+          "en": "Kyoto",
+          "th": "เกียวโต",
+          "zh": "京都",
+          "ko": "교토",
+          "ja": "京都"
+        }
+      }
+    ],
     "kanji": "春",
     "name": {
       "en": "Spring",
@@ -61,7 +102,48 @@
   },
   {
     "id": "summer",
-    "photo": "season-summer",
+    "slides": [
+      {
+        "photo": "season-summer",
+        "place": {
+          "en": "Summer fireworks",
+          "th": "ดอกไม้ไฟฤดูร้อน",
+          "zh": "夏日烟火",
+          "ko": "여름 불꽃놀이",
+          "ja": "夏の花火"
+        }
+      },
+      {
+        "photo": "season-summer-gion",
+        "place": {
+          "en": "Gion Matsuri, Kyoto",
+          "th": "เทศกาลกิองมัตสึริ เกียวโต",
+          "zh": "京都·祇园祭",
+          "ko": "교토 기온마쓰리",
+          "ja": "京都・祇園祭"
+        }
+      },
+      {
+        "photo": "season-summer-furano",
+        "place": {
+          "en": "Flower fields of Furano, Hokkaido",
+          "th": "ทุ่งดอกไม้ฟุราโนะ ฮอกไกโด",
+          "zh": "北海道·富良野花田",
+          "ko": "홋카이도 후라노 꽃밭",
+          "ja": "北海道・富良野の花畑"
+        }
+      },
+      {
+        "photo": "season-summer-okinawa",
+        "place": {
+          "en": "Kouri Beach, Okinawa",
+          "th": "หาดโคอุริ โอกินาว่า",
+          "zh": "冲绳·古宇利海滩",
+          "ko": "오키나와 고우리 비치",
+          "ja": "沖縄・古宇利ビーチ"
+        }
+      }
+    ],
     "kanji": "夏",
     "name": {
       "en": "Summer",
@@ -121,7 +203,48 @@
   },
   {
     "id": "autumn",
-    "photo": "season-autumn",
+    "slides": [
+      {
+        "photo": "season-autumn",
+        "place": {
+          "en": "Showa Kinen Park, Tokyo",
+          "th": "สวนโชวะคิเน็น โตเกียว",
+          "zh": "东京·昭和纪念公园",
+          "ko": "도쿄 쇼와기념공원",
+          "ja": "東京・国営昭和記念公園"
+        }
+      },
+      {
+        "photo": "season-autumn-fuji",
+        "place": {
+          "en": "Lake Kawaguchiko & Mt. Fuji",
+          "th": "ทะเลสาบคาวากุจิโกะและภูเขาไฟฟูจิ",
+          "zh": "河口湖与富士山",
+          "ko": "가와구치코 호수와 후지산",
+          "ja": "河口湖と富士山"
+        }
+      },
+      {
+        "photo": "season-autumn-nikko",
+        "place": {
+          "en": "Kirifuri Falls, Nikko",
+          "th": "น้ำตกคิริฟุริ นิกโก",
+          "zh": "日光·雾降瀑布",
+          "ko": "닛코 기리후리 폭포",
+          "ja": "日光・霧降の滝"
+        }
+      },
+      {
+        "photo": "season-autumn-kyoto",
+        "place": {
+          "en": "Kyoto",
+          "th": "เกียวโต",
+          "zh": "京都",
+          "ko": "교토",
+          "ja": "京都"
+        }
+      }
+    ],
     "kanji": "秋",
     "name": {
       "en": "Autumn",
@@ -181,7 +304,48 @@
   },
   {
     "id": "winter",
-    "photo": "season-winter",
+    "slides": [
+      {
+        "photo": "season-winter",
+        "place": {
+          "en": "Otaru Canal, Hokkaido",
+          "th": "คลองโอตารุ ฮอกไกโด",
+          "zh": "北海道·小樽运河",
+          "ko": "홋카이도 오타루 운하",
+          "ja": "北海道・小樽運河"
+        }
+      },
+      {
+        "photo": "season-winter-monkeys",
+        "place": {
+          "en": "Snow monkeys, Nagano",
+          "th": "ลิงหิมะ นากาโนะ",
+          "zh": "长野·雪猴",
+          "ko": "나가노 스노 몽키",
+          "ja": "長野・スノーモンキー"
+        }
+      },
+      {
+        "photo": "season-winter-ginzan",
+        "place": {
+          "en": "Ginzan Onsen, Yamagata",
+          "th": "กินซังออนเซ็น ยามากาตะ",
+          "zh": "山形·银山温泉",
+          "ko": "야마가타 긴잔 온천",
+          "ja": "山形・銀山温泉"
+        }
+      },
+      {
+        "photo": "season-winter-biei",
+        "place": {
+          "en": "Biei, Hokkaido",
+          "th": "บิเอ ฮอกไกโด",
+          "zh": "北海道·美瑛",
+          "ko": "홋카이도 비에이",
+          "ja": "北海道・美瑛"
+        }
+      }
+    ],
     "kanji": "冬",
     "name": {
       "en": "Winter",
