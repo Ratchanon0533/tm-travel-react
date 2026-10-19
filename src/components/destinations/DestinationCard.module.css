@@ -28,7 +28,6 @@
 }
 .card:hover .desc, .card:focus-visible .desc { max-height: 120px; opacity: 1; margin-top: 10px; }
 .more { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; padding-bottom: 2px; border-bottom: 1px solid var(--gold); font-size: 13px; font-weight: 600; }
-.badge { position: absolute; top: 18px; left: 18px; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--gold); color: var(--navy-900); font-size: 12px; font-weight: 700; letter-spacing: 0.04em; }
 
 /* Large and wide tiles always show the description */
 .large .name { font-size: clamp(34px, 3.5vw, 48px); }

@@ -1,6 +1,6 @@
 .footer { background: var(--navy-950); color: rgba(255, 255, 255, 0.72); padding: 80px 0 30px; font-size: 14.5px; }
 .grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.4fr; gap: 40px; padding-bottom: 50px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-.brand img { height: 32px; width: auto; margin-bottom: 20px; }
+.logo { font-size: 30px; color: #fff; margin-bottom: 20px; }
 .tagline { color: #fff; margin-bottom: 6px; }
 .tagline [lang="ja"] { font-family: var(--font-jp); color: var(--gold); letter-spacing: 0.15em; }
 .company { font-size: 13px; }

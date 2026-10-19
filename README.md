@@ -23,7 +23,8 @@ npm run preview    # preview the production build
 | Any interface text (headings, buttons, menu labels) | `src/i18n/en.json`, `ja.json`, `th.json`, `zh.json`, `ko.json` |
 | A destination (text, photo, category, order) | `src/data/destinations/<place>.json` |
 | Hero slides | `src/data/hero.json` |
-| Seasons / Experiences | `src/data/seasons.json`, `src/data/experiences.json` |
+| Seasons (text and slideshow photos) | `src/data/seasons.json` |
+| Partner logos and partner types (B2B section) | `src/data/partners.json` — the logos are placeholders: replace each with a real partner (with permission) by adding `"logo": "images/partners/<file>.svg"` (file in `public/`) |
 | "Why us" cards / planning steps | `src/data/features.json`, `src/data/steps.json` (text keys live in `src/i18n`) |
 | Destination filter categories | `src/data/filters.json` (labels are `filter.<name>` in `src/i18n`) |
 | Photos (Unsplash IDs + photographer credit) | `src/data/photos.json` |
@@ -48,7 +49,7 @@ src/
 │   ├── tokens.css              Brand design tokens (navy #171C61, gold #F8B62D)
 │   └── global.css              Reset, typography, .container, .section, .reveal
 ├── i18n/*.json                 One file per language (UI text)
-├── data/                       Content: destinations/*.json, hero, seasons, experiences, …
+├── data/                       Content: destinations/*.json, hero, seasons, partners, …
 ├── lib/
 │   ├── i18n.jsx                I18nProvider + useI18n() → { lang, t, tx }
 │   ├── paths.js                asset(), localizedHome(), langFromPath()
@@ -61,11 +62,10 @@ src/
 └── components/
     ├── ui/                     Icon, Button, Eyebrow, SectionHeading
     ├── layout/                 Header, LanguageSwitcher, Footer, BackToTop
-    ├── sections/               Hero, Intro, Destinations, Seasons, Experiences, CallToAction
+    ├── sections/               Hero, Intro, Destinations, Seasons, Partners, CallToAction
     ├── intro/FeatureCard
     ├── destinations/           DestinationCard, DestinationFilters, DestinationModal
     ├── seasons/SeasonPanel
-    ├── experiences/ExperienceCard
     └── cta/StepItem
 ```
 
@@ -96,7 +96,7 @@ In the browser, `main.jsx` hydrates that HTML, so the page is readable before Ja
 
 ## Common tasks
 
-**Add a destination.** Copy `src/data/destinations/nara.json` to a new file and edit it. Then add its photo to `src/data/photos.json`. The Unsplash ID is the part after `photo-` in an image URL.
+**Add a destination.** Copy `src/data/destinations/nara.json` to a new file and edit it. Then add its photo to `src/data/photos.json`. The Unsplash ID is the part after `photo-` in an image URL. To use your own photo instead, save it as `public/images/photos/<key>.jpg` (about 1600 px wide) and give it `"local": true` in `photos.json`, like `dest-shikoku`.
 
 **Hide a destination** without deleting it: add `"hidden": true` to its file.
 

@@ -1,20 +1,21 @@
 import { Fragment } from "react";
 import Icon from "../ui/Icon.jsx";
+import Logo from "../ui/Logo.jsx";
 import { site, navigation } from "../../config/site.js";
 import { useI18n } from "../../lib/i18n.jsx";
-import { asset } from "../../lib/paths.js";
 import { photoCredits } from "../../lib/images.js";
 import styles from "./Footer.module.css";
 
 export default function Footer() {
   const { t } = useI18n();
-  const exploreLinks = navigation.slice(0, 3);
+  // About and Partners are in the Company column, Contact has its own
+  const exploreLinks = navigation.filter((item) => item.href === "#destinations" || item.href === "#seasons");
 
   return (
     <footer className={styles.footer}>
       <div className={`container ${styles.grid}`}>
         <div className={styles.brand}>
-          <img src={asset(site.logo.white)} alt={site.name} width={site.logo.width} height={site.logo.height} loading="lazy" />
+          <Logo className={styles.logo} />
           <p className={styles.tagline}><span lang="ja">{site.taglineJa}</span>{t("footer.tagline") && <> — {t("footer.tagline")}</>}</p>
           <p className={styles.company}>{site.legalNameJa} · {site.legalName}</p>
         </div>
@@ -28,6 +29,7 @@ export default function Footer() {
           <h4>{t("footer.company")}</h4>
           <ul>
             <li><a href="#about">{t("footer.aboutLink")}</a></li>
+            <li><a href="#partners">{t("nav.partners")}</a></li>
             <li><a href={site.japaneseSiteUrl} target="_blank" rel="noopener">{t("footer.jpSite")}</a></li>
           </ul>
         </div>

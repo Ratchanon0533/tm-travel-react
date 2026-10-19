@@ -1,0 +1,4 @@
+.logo { display: inline-flex; align-items: center; gap: 0.3em; font-size: 30px; line-height: 1; white-space: nowrap; }
+.mark { flex: none; width: 1em; height: 1em; }
+/* heavy capitals about as tall as the mark, like the original wordmark */
+.name { font-family: "Inter", sans-serif; font-size: 1.04em; font-weight: 800; letter-spacing: 0.01em; transform: translateY(0.02em); }

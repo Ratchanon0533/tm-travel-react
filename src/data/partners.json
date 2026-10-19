@@ -1,0 +1,17 @@
+{
+  "logos": [
+    { "name": "Logoipsum", "mark": "circle" },
+    { "name": "Ipsum Tours", "mark": "mountain" },
+    { "name": "Lorem Travel", "mark": "wave" },
+    { "name": "Dolor Holidays", "mark": "diamond" },
+    { "name": "Amet Voyages", "mark": "sun" },
+    { "name": "Elit Journeys", "mark": "arc" },
+    { "name": "Tempor & Co.", "mark": "square" },
+    { "name": "Magna Trips", "mark": "triangle" }
+  ],
+  "types": [
+    { "icon": "suitcase", "title": "partners.t1", "text": "partners.d1" },
+    { "icon": "calendar", "title": "partners.t2", "text": "partners.d2" },
+    { "icon": "route", "title": "partners.t3", "text": "partners.d3" }
+  ]
+}

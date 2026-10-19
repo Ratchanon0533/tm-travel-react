@@ -11,7 +11,7 @@ import Hero from "./components/sections/Hero.jsx";
 import Intro from "./components/sections/Intro.jsx";
 import Destinations from "./components/sections/Destinations.jsx";
 import Seasons from "./components/sections/Seasons.jsx";
-import Experiences from "./components/sections/Experiences.jsx";
+import Partners from "./components/sections/Partners.jsx";
 import CallToAction from "./components/sections/CallToAction.jsx";
 
 export default function App({ lang }) {
@@ -36,7 +36,7 @@ function HomePage() {
         <Intro />
         <Destinations />
         <Seasons />
-        <Experiences />
+        <Partners />
         <CallToAction />
       </main>
       <Footer />

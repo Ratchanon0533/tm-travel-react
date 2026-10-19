@@ -68,8 +68,8 @@
     "by": "Sam Lee"
   },
   "dest-shikoku": {
-    "id": "1561452978-c300afce7342",
-    "by": "Pavlo Klein"
+    "local": true,
+    "note": "Dogo Onsen Honkan, Matsuyama — our own photo (public/images/photos/dest-shikoku.jpg)"
   },
   "dest-kanazawa": {
     "id": "1669380981740-18db28620b8b",
@@ -162,22 +162,6 @@
   "season-winter-biei": {
     "id": "1550290960-6e04a8ca2509",
     "by": "hyun kim"
-  },
-  "exp-ryokan": {
-    "id": "1610333684078-c89bd57f2e46",
-    "by": "Lucas Calloch"
-  },
-  "exp-food": {
-    "id": "1502364271109-0a9a75a2a9df",
-    "by": "Thomas Marban"
-  },
-  "exp-tea": {
-    "id": "1566373049939-704ea187ef98",
-    "by": "Matcha & CO"
-  },
-  "exp-nature": {
-    "id": "1504850759690-1c3beb59be7c",
-    "by": "Jonathan Forage"
   },
   "cta-bg": {
     "id": "1545569341-9eb8b30979d9",

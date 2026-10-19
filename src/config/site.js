@@ -10,19 +10,13 @@ export const site = {
   legalName: "TM Travel Co., Ltd.",
   legalNameJa: "株式会社TMトラベル",
   taglineJa: "旅で 人を つなぐ",
+  taglineEn: "Connecting people through travel", // under the logo in the header
 
   /** Placeholder contact details — replace with the real ones before going live (the number also appears in "cta.call" in src/i18n) */
   phone: "+81 00-0000-0000",
   phoneHref: "tel:+810000000000",
   address: ["1-2-3 Sample-cho, Matsuyama,", "Ehime 000-0000, Japan"],
   japaneseSiteUrl: "https://tm-travel.co.jp/",
-
-  logo: {
-    color: "images/logo/tm-travel-logo.png",
-    white: "images/logo/tm-travel-logo-white.png",
-    width: 564,
-    height: 75,
-  },
 
   /** Hero slideshow: milliseconds per slide */
   heroIntervalMs: 7000,
@@ -68,9 +62,9 @@ export const defaultLang = "en";
 
 /** Main navigation — `key` is the i18n label, `href` the section id */
 export const navigation = [
+  { key: "nav.about", href: "#about" },
   { key: "nav.destinations", href: "#destinations" },
   { key: "nav.seasons", href: "#seasons" },
-  { key: "nav.experiences", href: "#experiences" },
-  { key: "nav.about", href: "#about" },
+  { key: "nav.partners", href: "#partners" },
   { key: "nav.contact", href: "#contact" },
 ];

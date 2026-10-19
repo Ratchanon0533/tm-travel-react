@@ -11,9 +11,9 @@
 
 /* Brand */
 .brand { position: relative; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.logo { height: 30px; width: auto; transition: opacity 0.35s var(--ease); }
-.logoDark { position: absolute; top: 0; left: 0; opacity: 0; }
-.tagline { font-family: var(--font-jp); font-size: 11px; letter-spacing: 0.35em; padding-left: 12%; color: rgba(255, 255, 255, 0.85); transition: color 0.35s; }
+.logo { font-size: 28px; color: #fff; transition: color 0.35s var(--ease); }
+/* about as wide as the logo above it */
+.tagline { font-family: "Inter", sans-serif; font-size: 8px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255, 255, 255, 0.85); transition: color 0.35s; }
 
 /* Nav */
 .nav { margin-left: auto; }
@@ -42,8 +42,7 @@
 /* Solid (scrolled) state */
 .solid { height: 72px; background: rgba(255, 255, 255, 0.96); backdrop-filter: saturate(1.4) blur(12px); box-shadow: 0 6px 30px -12px rgba(13, 17, 64, 0.25); }
 .solid::before { opacity: 0; }
-.solid .logoLight { opacity: 0; }
-.solid .logoDark { opacity: 1; }
+.solid .logo { color: var(--navy); }
 .solid .tagline, .solid .nav li a { color: var(--navy); }
 .solid .burger span { background: var(--navy); }
 
@@ -109,6 +108,6 @@
 }
 
 @media (max-width: 600px) {
-  .logo { height: 24px; }
-  .tagline { font-size: 9.5px; }
+  .logo { font-size: 23px; }
+  .tagline { font-size: 7.2px; letter-spacing: 0.08em; }
 }

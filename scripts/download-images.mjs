@@ -15,7 +15,8 @@ const photos = JSON.parse(await readFile(path.join(root, "src/data/photos.json")
 const WIDTH = 2000;
 
 await mkdir(outDir, { recursive: true });
-for (const [key, { id, by }] of Object.entries(photos)) {
+for (const [key, { id, by, local }] of Object.entries(photos)) {
+  if (local) continue; // our own photo, already in public/images/photos/
   const url = `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${WIDTH}&q=78&fm=jpg`;
   const res = await fetch(url);
   if (!res.ok) { console.error(`✗ ${key} (HTTP ${res.status})`); continue; }

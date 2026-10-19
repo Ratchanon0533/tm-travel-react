@@ -32,7 +32,6 @@ export default function DestinationCard({ destination: d, span = [1, 1], index =
         loading="lazy"
         decoding="async"
       />
-      {d.home && <span className={styles.badge}><Icon name="pin" size={14} />{t("dest.home")}</span>}
       <span className={styles.body}>
         <span className={styles.region}>{tx(d.region)}</span>
         <span className={styles.name}>{tx(d.name)}</span>

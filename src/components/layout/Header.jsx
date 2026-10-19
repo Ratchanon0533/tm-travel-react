@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../ui/Button.jsx";
+import Logo from "../ui/Logo.jsx";
 import LanguageSwitcher from "./LanguageSwitcher.jsx";
 import { site, navigation } from "../../config/site.js";
 import { useI18n } from "../../lib/i18n.jsx";
-import { asset, localizedHome } from "../../lib/paths.js";
+import { localizedHome } from "../../lib/paths.js";
 import { useScrolled } from "../../hooks/useScrolled.js";
 import { cx } from "../../lib/cx.js";
 import styles from "./Header.module.css";
 
 /**
- * Fixed header: transparent over the hero (white logo), solid white after scrolling (color logo).
+ * Fixed header: transparent over the hero (white logo), solid white after scrolling (navy logo).
  * Includes the main nav, language switcher, CTA button, mobile menu (a curtain that drops from the top)
  * and a thin gold bar along the bottom showing how far down the page you are.
  */
@@ -78,9 +79,8 @@ export default function Header() {
     <header className={cx(styles.header, solid && styles.solid, navOpen && styles.navOpen)}>
       <div className={cx("container", styles.inner)}>
         <a className={styles.brand} href={localizedHome(lang)} aria-label={`${site.name} — Home`}>
-          <img className={cx(styles.logo, styles.logoLight)} src={asset(site.logo.white)} alt={site.name} width={site.logo.width} height={site.logo.height} />
-          <img className={cx(styles.logo, styles.logoDark)} src={asset(site.logo.color)} alt="" width={site.logo.width} height={site.logo.height} aria-hidden="true" />
-          <span className={styles.tagline} lang="ja">{site.taglineJa}</span>
+          <Logo className={styles.logo} />
+          <span className={styles.tagline}>{site.taglineEn}</span>
         </a>
 
         <nav className={styles.nav} id="mainNav" aria-label="Main">
