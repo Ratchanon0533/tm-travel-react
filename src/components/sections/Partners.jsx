@@ -18,14 +18,14 @@ const MARKS = {
   triangle: <path d="M12 3 22 21H2z" />,
 };
 
-// The stream has three depths: far logos are small, faint and slow; near ones bigger and faster.
+// The stream has two depths: far logos are smaller, fainter and slower; near ones bigger and faster.
 // y: height in the stream (0 top … 1 bottom) · speed: px per second
 const LAYERS = [
-  { y: 0.24, scale: 0.8, speed: 15 },
-  { y: 0.53, scale: 0.94, speed: 24 },
-  { y: 0.8, scale: 1.08, speed: 36 },
+  { y: 0.3, scale: 0.86, speed: 18 },
+  { y: 0.72, scale: 1, speed: 30 },
 ];
-const MARGIN = 260; // px past each edge where logos leave and come back
+const MARGIN = 180; // px past each edge where logos leave and come back
+const MIN_GAP = 90; // px at least between logos of the same depth (matters on narrow screens)
 
 /** Repeatable "random" numbers, so the page from the server and the browser lay the logos out alike */
 function seeded(seed) {
@@ -49,8 +49,8 @@ function layout(logos) {
       layer,
       // 0…1 along the stream: the depths interleave, each logo nudged a little off its slot
       x: (seen[layer]++ + (layer + 0.5) / LAYERS.length + (rand() - 0.5) * 0.35) / perLayer[layer],
-      y: LAYERS[layer].y + (rand() - 0.5) * 0.07,
-      amp: 5 + rand() * 7, // px up and down
+      y: LAYERS[layer].y + (rand() - 0.5) * 0.06,
+      amp: 4 + rand() * 6, // px up and down
       length: 380 + rand() * 420, // px per bob
       phase: rand() * Math.PI * 2,
       pace: 0.35 + rand() * 0.5,
@@ -70,7 +70,7 @@ function Logo({ partner }) {
 }
 
 /**
- * Logos drifting like things carried by water: three depths at different speeds, each logo bobbing
+ * Logos drifting like things carried by water: two depths at different speeds, each logo bobbing
  * and tilting in its own rhythm, with tiny specks flowing past (a canvas). The flow calms under the
  * mouse, pauses while off screen, and is a still row with "reduce motion".
  */
@@ -87,7 +87,8 @@ function LogoStream({ logos, label }) {
     lis.forEach((li) => { li.style.left = "0"; li.style.top = "0"; }); // from here on, placed by transform
     const css = getComputedStyle(boxEl);
     const colors = [css.getPropertyValue("--gold").trim() || "#f8b62d", css.getPropertyValue("--navy").trim() || "#171c61"];
-    let W = 0, H = 0, sizes = [], specks = [];
+    const perLayer = LAYERS.map((_, l) => items.filter((it) => it.layer === l).length);
+    let W = 0, H = 0, loop = 1, sizes = [], specks = [];
 
     const measure = () => {
       W = boxEl.clientWidth;
@@ -97,6 +98,9 @@ function LogoStream({ logos, label }) {
       canvas.current.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       sizes = lis.map((li) => [li.offsetWidth, li.offsetHeight]);
+      // one lap of the stream: the strip plus margins, longer if the logos would otherwise crowd
+      const widest = Math.max(...sizes.map(([w]) => w));
+      loop = Math.max(W + 2 * MARGIN, Math.max(...perLayer) * (widest + MIN_GAP));
       specks = Array.from({ length: W < 600 ? 26 : 48 }, () => ({
         x: Math.random() * W, y: Math.random() * H, r: 0.8 + Math.random() * 1.8,
         speed: 12 + Math.random() * 46, amp: 3 + Math.random() * 10, length: 160 + Math.random() * 420,
@@ -113,7 +117,6 @@ function LogoStream({ logos, label }) {
       time += dt * (0.4 + 0.6 * flow);
       LAYERS.forEach((layer, l) => { travelled[l] += layer.speed * flow * dt; });
 
-      const loop = W + 2 * MARGIN;
       items.forEach((it, i) => {
         const x = (((it.x * loop - travelled[it.layer]) % loop) + loop) % loop - MARGIN;
         const k = (2 * Math.PI) / it.length;
@@ -185,7 +188,7 @@ export default function Partners() {
   return (
     <section className={`section ${styles.partners}`} id="partners">
       <div className="container">
-        <SectionHeading eyebrow={t("partners.eyebrow")} title={t("partners.title")} sub={t("partners.sub")} />
+        <SectionHeading className={styles.heading} eyebrow={t("partners.eyebrow")} title={t("partners.title")} sub={t("partners.sub")} />
       </div>
 
       <LogoStream logos={partners.logos} label={t("partners.logos")} />

@@ -1,25 +1,25 @@
 .partners { overflow: hidden; background: var(--white); }
+.partners .heading { margin-bottom: 8px; } /* the logo stream has its own room above the logos */
 
 /* Logos drifting on a stream (moved by Partners.jsx); fades out at both edges */
 .stream {
-  position: relative; height: 240px; margin: clamp(6px, 1.5vw, 20px) 0 clamp(30px, 4vw, 50px); overflow: hidden;
+  position: relative; height: 200px; margin: 0 0 clamp(20px, 3vw, 36px); overflow: hidden;
   mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
 .specks { position: absolute; inset: 0; width: 100%; height: 100%; }
 .logos li { position: absolute; transform: translate(-50%, -50%); will-change: transform; }
 /* farther = fainter */
-.logos li[data-layer="0"] { --fade: 0.32; }
-.logos li[data-layer="1"] { --fade: 0.5; }
-.logos li[data-layer="2"] { --fade: 0.68; }
+.logos li[data-layer="0"] { --fade: 0.42; }
+.logos li[data-layer="1"] { --fade: 0.72; }
 
 .placeholder {
   display: inline-flex; align-items: center; gap: 9px; white-space: nowrap;
-  font-family: var(--font-head); font-size: 22px; font-weight: 600; color: var(--navy); opacity: var(--fade, 0.5); transition: opacity 0.3s;
+  font-family: var(--font-head); font-size: 29px; font-weight: 600; color: var(--navy); opacity: var(--fade, 0.5); transition: opacity 0.3s;
 }
-.placeholder svg { width: 22px; height: 22px; fill: currentColor; transition: fill 0.3s; }
+.placeholder svg { width: 26px; height: 26px; fill: currentColor; transition: fill 0.3s; }
 .placeholder:hover { opacity: 1; }
 .placeholder:hover svg { fill: var(--gold); }
-.image { display: block; height: 34px; width: auto; filter: grayscale(1); opacity: var(--fade, 0.55); transition: filter 0.3s, opacity 0.3s; }
+.image { display: block; height: 44px; width: auto; filter: grayscale(1); opacity: var(--fade, 0.55); transition: filter 0.3s, opacity 0.3s; }
 .image:hover { filter: none; opacity: 1; }
 
 /* Who we work with: three cards */
@@ -43,8 +43,10 @@
 
 @media (max-width: 900px) {
   .types { grid-template-columns: 1fr; }
-  .stream { height: 220px; }
-  .placeholder { font-size: 19px; }
+  .stream { height: 180px; }
+  .placeholder { font-size: 23px; }
+  .placeholder svg { width: 21px; height: 21px; }
+  .image { height: 36px; }
 }
 /* Reduce motion: no stream, a still and wrapped row of logos */
 @media (prefers-reduced-motion: reduce) {

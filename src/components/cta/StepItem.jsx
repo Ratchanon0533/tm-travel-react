@@ -2,7 +2,6 @@ import styles from "./StepItem.module.css";
 
 /**
  * Numbered planning step on the timeline. Props: number, title, text, reached (lit up by the gold line).
- * "reached" is a data attribute, not a class: re-rendering the class would drop the scroll-reveal's "is-in".
  */
 export default function StepItem({ number, title, text, reached }) {
   return (
