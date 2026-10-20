@@ -1,0 +1,82 @@
+.modal {
+  width: min(940px, calc(100% - 48px)); max-width: none; max-height: calc(100svh - 32px); padding: 0; border: 0;
+  /* no background of its own: white only behind the form, so none shows at the navy panel's edges */
+  border-radius: var(--radius-lg); overflow-y: auto; background: transparent; color: var(--ink);
+  box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.6);
+}
+.modal[open] { animation: pop 0.45s var(--ease); }
+.modal::backdrop { background: rgba(8, 11, 44, 0.72); backdrop-filter: blur(6px); }
+@keyframes pop { from { opacity: 0; transform: translateY(24px) scale(0.98); } }
+
+.close {
+  position: absolute; top: 12px; right: 12px; z-index: 2; width: 42px; height: 42px; border-radius: 50%;
+  display: grid; place-items: center; color: var(--navy); transition: transform 0.3s var(--ease), background 0.3s;
+}
+.close:hover { transform: rotate(90deg); background: var(--ivory); }
+
+/* Two columns: navy side panel + form (stacked on phones) */
+.layout { display: grid; grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.3fr); }
+
+.side {
+  display: flex; flex-direction: column; padding: 34px 30px; color: #fff;
+  background: radial-gradient(120% 80% at 0% 0%, #26308a 0%, var(--navy) 45%, var(--navy-900) 100%);
+}
+.title { margin: 0 0 12px; font-family: var(--font-head); font-size: clamp(28px, 3vw, 36px); line-height: 1.15; }
+.intro { margin: 0; font-size: 15px; line-height: 1.65; color: rgba(255, 255, 255, 0.78); }
+
+/* Write your own email: the address (opens a blank email) and a copy button */
+.direct { margin-top: auto; padding-top: 26px; }
+.direct p { margin: 0 0 10px; font-size: 13.5px; color: rgba(255, 255, 255, 0.7); }
+.address { display: grid; gap: 4px; padding: 4px; border-radius: 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); }
+.address a { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 10px; font-weight: 600; color: #fff; word-break: break-all; transition: color 0.25s; }
+.address a:hover { color: var(--gold); }
+.address a :global(.icon) { flex: none; color: var(--gold); }
+.address button {
+  display: flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 14px; border-radius: 12px;
+  background: var(--gold); color: var(--navy-900); font-size: 13px; font-weight: 700; transition: background 0.25s, color 0.25s;
+}
+.address button:hover { background: var(--gold-hover); }
+.address button.copied { background: #fff; color: var(--navy-900); }
+
+/* The form */
+.form, .done { background: #fff; }
+.form { padding: 30px 30px 28px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px 16px; }
+.wide { grid-column: 1 / -1; }
+.field { display: grid; gap: 6px; }
+.field > span { font-size: 13px; font-weight: 600; letter-spacing: 0.02em; color: var(--navy); }
+.field input, .field textarea {
+  width: 100%; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--ivory);
+  font: inherit; font-size: 15px; color: var(--ink); transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+}
+.field textarea { resize: vertical; min-height: 84px; }
+.field input:focus, .field textarea:focus {
+  outline: none; border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px rgba(248, 182, 45, 0.18);
+}
+/* the dropdown matches the inputs' height */
+.field :global([aria-haspopup="listbox"]) { padding-block: 10px; }
+
+.error { margin: 14px 0 0; padding: 10px 14px; border-radius: 12px; background: #fdf0ee; color: #8a2c1d; font-size: 14px; }
+.error a, .done a { color: var(--navy); font-weight: 600; text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin-top: 20px; }
+.actions button[disabled] { opacity: 0.6; cursor: wait; }
+.note { margin: 0; flex: 1 1 200px; font-size: 13px; color: var(--muted); }
+
+/* Sent */
+.done { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 34px; text-align: center; }
+.done p { max-width: 400px; margin: 0 0 22px; color: var(--muted); }
+.doneTitle { margin-bottom: 10px; font-family: var(--font-head); font-size: clamp(28px, 3vw, 36px); color: var(--navy); }
+.check { display: inline-grid; place-items: center; width: 64px; height: 64px; margin-bottom: 18px; border-radius: 50%; background: var(--navy); color: var(--gold); }
+
+/* Phones: one column, as a bottom sheet */
+@media (max-width: 760px) {
+  .modal { width: 100%; max-height: 92svh; margin: auto 0 0; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  .layout { grid-template-columns: 1fr; }
+  .side { padding: 28px 24px 24px; }
+  .close { color: #fff; }
+  .close:hover { background: rgba(255, 255, 255, 0.12); }
+  .form { padding: 24px; }
+}
+@media (max-width: 480px) {
+  .grid { grid-template-columns: 1fr; }
+}

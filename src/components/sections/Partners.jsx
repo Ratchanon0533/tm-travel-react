@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import SectionHeading from "../ui/SectionHeading.jsx";
 import Icon from "../ui/Icon.jsx";
+import PartnerForm from "../partners/PartnerForm.jsx";
 import { partners } from "../../lib/content.js";
 import { useI18n } from "../../lib/i18n.jsx";
 import { asset } from "../../lib/paths.js";
@@ -179,12 +180,13 @@ function LogoStream({ logos, label }) {
 
 /**
  * B2B section for travel agencies, tour operators and group planners: partner logos drifting on a
- * stream, the kinds of partners we work with, and a link to the contact section.
+ * stream, the kinds of partners we work with, and a "Become a partner" button that opens an inquiry form.
  * Logos and partner types: src/data/partners.json · text: "partners.*" in src/i18n.
  * The logos are placeholders — replace them with real partners (with their permission).
  */
 export default function Partners() {
   const { t } = useI18n();
+  const [formOpen, setFormOpen] = useState(false);
   return (
     <section className={`section ${styles.partners}`} id="partners">
       <div className="container">
@@ -204,8 +206,9 @@ export default function Partners() {
           ))}
         </ol>
         <div className={`${styles.cta} reveal`}>
-          <a href="#contact">{t("partners.cta")}<Icon name="arrow" /></a>
+          <button type="button" aria-haspopup="dialog" onClick={() => setFormOpen(true)}>{t("partners.cta")}<Icon name="arrow" /></button>
         </div>
+        <PartnerForm open={formOpen} onClose={() => setFormOpen(false)} />
       </div>
     </section>
   );

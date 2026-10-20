@@ -34,12 +34,12 @@
 .type p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
 
 .cta { display: flex; justify-content: center; margin-top: clamp(40px, 5vw, 60px); }
-.cta a {
+.cta button {
   display: inline-flex; align-items: center; gap: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--gold);
   font-size: 15px; font-weight: 600; letter-spacing: 0.04em; color: var(--navy);
 }
-.cta a :global(.icon) { transition: transform 0.3s var(--ease); }
-.cta a:hover :global(.icon) { transform: translateX(5px); }
+.cta button :global(.icon) { transition: transform 0.3s var(--ease); }
+.cta button:hover :global(.icon) { transform: translateX(5px); }
 
 @media (max-width: 900px) {
   .types { grid-template-columns: 1fr; }

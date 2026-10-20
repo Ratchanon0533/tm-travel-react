@@ -1,0 +1,28 @@
+.select { position: relative; }
+
+.trigger {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--ivory);
+  font: inherit; font-size: 15px; color: var(--ink); text-align: left; cursor: pointer;
+  transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+}
+.trigger:hover { border-color: rgba(23, 28, 97, 0.25); }
+.trigger:focus-visible, .open .trigger { outline: none; border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px rgba(248, 182, 45, 0.18); }
+.caret { flex: none; width: 18px; height: 18px; fill: none; stroke: var(--navy); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.3s var(--ease); }
+.open .caret { transform: rotate(180deg); }
+
+/* The open list */
+.list {
+  position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 5; padding: 6px;
+  border-radius: 14px; background: #fff; border: 1px solid var(--line);
+  box-shadow: 0 24px 50px -18px rgba(13, 17, 64, 0.35);
+  animation: drop 0.22s var(--ease);
+}
+@keyframes drop { from { opacity: 0; transform: translateY(-6px); } }
+.option {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 11px 12px; border-radius: 10px; font-size: 15px; color: var(--ink); cursor: pointer; transition: background 0.15s;
+}
+.active { background: var(--ivory); }
+.option[aria-selected="true"] { font-weight: 600; color: var(--navy); }
+.check { flex: none; width: 18px; height: 18px; fill: none; stroke: var(--gold-600); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }

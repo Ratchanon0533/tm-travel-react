@@ -18,6 +18,15 @@ export const site = {
   address: ["1-2-3 Sample-cho, Matsuyama,", "Ehime 000-0000, Japan"],
   japaneseSiteUrl: "https://tm-travel.co.jp/",
 
+  /**
+   * "Become a partner" form. Placeholder email — replace with the real one.
+   * Without an endpoint, sending opens the visitor's email app addressed to `email`, everything filled in.
+   * With an endpoint from a form service (e.g. "https://formspree.io/f/xxxxxxx"), the form is sent
+   * straight to that service, which emails it to you.
+   */
+  email: "partners@example.com",
+  partnerFormEndpoint: "",
+
   /** Hero slideshow: milliseconds per slide */
   heroIntervalMs: 7000,
 

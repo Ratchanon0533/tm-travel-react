@@ -19,7 +19,8 @@ npm run preview    # preview the production build
 | I want to change… | Edit this file |
 |---|---|
 | Colors, fonts, spacing, corner radius | `src/styles/tokens.css` |
-| Phone, address, logo files, slideshow speed, languages, menu items, site URL | `src/config/site.js` |
+| Phone, address, slideshow speed, languages, menu items, site URL (the logo is `src/components/ui/Logo.jsx`) | `src/config/site.js` |
+| "Become a partner" form: where inquiries go (email, or a form service such as Formspree) | `email` and `partnerFormEndpoint` in `src/config/site.js` |
 | Any interface text (headings, buttons, menu labels) | `src/i18n/en.json`, `ja.json`, `th.json`, `zh.json`, `ko.json` |
 | A destination (text, photo, category, order) | `src/data/destinations/<place>.json` |
 | Hero slides | `src/data/hero.json` |
