@@ -11,10 +11,15 @@ import styles from "./PartnerForm.module.css";
  * "Become a partner" popup (native <dialog>: Esc, focus and backdrop handled). Opens when `open`
  * is true; calls onClose when dismissed.
  * Sending: with site.partnerFormEndpoint set, the form is posted to that form service; otherwise the
- * visitor's email app opens, addressed to site.email, with everything filled in.
+ * visitor's Gmail opens in a new tab ("new message", addressed to site.email), with everything filled in.
  * Two columns on wide screens: who it is for and a "write your own email" option (the address, which opens a blank
  * email, and a copy button) on the left, the form on the right. Stacked on phones.
  */
+/** Gmail's "new message" page, addressed to us, with the subject and text filled in */
+function gmailUrl({ subject = "", body = "" } = {}) {
+  return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(site.email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
 export default function PartnerForm({ open, onClose }) {
   const { t } = useI18n();
   const ref = useRef(null);
@@ -64,7 +69,7 @@ export default function PartnerForm({ open, onClose }) {
       }
       return;
     }
-    // No form service: hand everything to the visitor's email app (labels in English, for our team)
+    // No form service: open Gmail in a new tab with everything filled in (labels in English, for our team)
     const v = (name) => String(data.get(name) ?? "").trim();
     const body = [
       `Company: ${v("company")}`,
@@ -76,12 +81,12 @@ export default function PartnerForm({ open, onClose }) {
       v("message"),
     ].join("\n");
     const subject = `Partnership inquiry — ${v("company")}`;
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(gmailUrl({ subject, body }), "_blank", "noopener");
     setStatus("mailed");
   };
 
   const done = status === "mailed" || status === "sent";
-  const mailLink = <a href={`mailto:${site.email}`}>{site.email}</a>;
+  const mailLink = <a href={gmailUrl({ subject: "Partnership inquiry" })} target="_blank" rel="noopener">{site.email}</a>;
 
   return (
     <dialog ref={ref} className={styles.modal} aria-labelledby="partner-form-title" onClose={onClose} onClick={(e) => e.target === ref.current && onClose()}>
@@ -98,7 +103,7 @@ export default function PartnerForm({ open, onClose }) {
           <div className={styles.direct}>
             <p>{t("pform.direct")}</p>
             <div className={styles.address}>
-              <a href={`mailto:${site.email}?subject=${encodeURIComponent("Partnership inquiry")}`}><Icon name="mail" size={18} />{site.email}</a>
+              <a href={gmailUrl({ subject: "Partnership inquiry" })} target="_blank" rel="noopener"><Icon name="mail" size={18} />{site.email}</a>
               <button type="button" className={copied ? styles.copied : undefined} onClick={copyAddress}>
                 <Icon name="copy" size={15} />
                 <span aria-live="polite">{copied ? t("pform.copied") : t("pform.copy")}</span>

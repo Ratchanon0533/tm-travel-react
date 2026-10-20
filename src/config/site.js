@@ -20,7 +20,7 @@ export const site = {
 
   /**
    * "Become a partner" form. Placeholder email — replace with the real one.
-   * Without an endpoint, sending opens the visitor's email app addressed to `email`, everything filled in.
+   * Without an endpoint, sending opens Gmail in a new tab, addressed to `email`, everything filled in.
    * With an endpoint from a form service (e.g. "https://formspree.io/f/xxxxxxx"), the form is sent
    * straight to that service, which emails it to you.
    */
