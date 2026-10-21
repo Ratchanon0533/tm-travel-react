@@ -75,5 +75,6 @@ export const navigation = [
   { key: "nav.destinations", href: "#destinations" },
   { key: "nav.seasons", href: "#seasons" },
   { key: "nav.partners", href: "#partners" },
+  { key: "nav.experiences", href: "#experiences" },
   { key: "nav.contact", href: "#contact" },
 ];

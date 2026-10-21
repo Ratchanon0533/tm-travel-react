@@ -24,7 +24,7 @@ npm run preview    # preview the production build
 | Any interface text (headings, buttons, menu labels) | `src/i18n/en.json`, `ja.json`, `th.json`, `zh.json`, `ko.json` |
 | A destination (text, photo, category, order) | `src/data/destinations/<place>.json` |
 | Hero slides | `src/data/hero.json` |
-| Seasons (text and slideshow photos) | `src/data/seasons.json` |
+| Seasons (text and slideshow photos) / Experiences | `src/data/seasons.json`, `src/data/experiences.json` |
 | Partner logos and partner types (B2B section) | `src/data/partners.json` — the logos are placeholders: replace each with a real partner (with permission) by adding `"logo": "images/partners/<file>.svg"` (file in `public/`) |
 | "Why us" cards / planning steps | `src/data/features.json`, `src/data/steps.json` (text keys live in `src/i18n`) |
 | Destination filter categories | `src/data/filters.json` (labels are `filter.<name>` in `src/i18n`) |
@@ -50,7 +50,7 @@ src/
 │   ├── tokens.css              Brand design tokens (navy #171C61, gold #F8B62D)
 │   └── global.css              Reset, typography, .container, .section, .reveal
 ├── i18n/*.json                 One file per language (UI text)
-├── data/                       Content: destinations/*.json, hero, seasons, partners, …
+├── data/                       Content: destinations/*.json, hero, seasons, partners, experiences, …
 ├── lib/
 │   ├── i18n.jsx                I18nProvider + useI18n() → { lang, t, tx }
 │   ├── paths.js                asset(), localizedHome(), langFromPath()
@@ -63,10 +63,11 @@ src/
 └── components/
     ├── ui/                     Icon, Button, Eyebrow, SectionHeading
     ├── layout/                 Header, LanguageSwitcher, Footer, BackToTop
-    ├── sections/               Hero, Intro, Destinations, Seasons, Partners, CallToAction
+    ├── sections/               Hero, Intro, Destinations, Seasons, Partners, Experiences, CallToAction
     ├── intro/FeatureCard
     ├── destinations/           DestinationCard, DestinationFilters, DestinationModal
     ├── seasons/SeasonPanel
+    ├── experiences/ExperienceCard
     └── cta/StepItem
 ```
 

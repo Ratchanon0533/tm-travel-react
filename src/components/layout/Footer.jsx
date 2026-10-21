@@ -9,7 +9,7 @@ import styles from "./Footer.module.css";
 export default function Footer() {
   const { t } = useI18n();
   // About and Partners are in the Company column, Contact has its own
-  const exploreLinks = navigation.filter((item) => item.href === "#destinations" || item.href === "#seasons");
+  const exploreLinks = navigation.filter((item) => ["#destinations", "#seasons", "#experiences"].includes(item.href));
 
   return (
     <footer className={styles.footer}>

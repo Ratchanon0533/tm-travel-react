@@ -13,7 +13,7 @@ import Destinations from "./components/sections/Destinations.jsx";
 import Seasons from "./components/sections/Seasons.jsx";
 import Partners from "./components/sections/Partners.jsx";
 import CallToAction from "./components/sections/CallToAction.jsx";
-
+import Experiences from "./components/sections/Experiences.jsx";
 export default function App({ lang }) {
   return (
     <I18nProvider lang={lang}>
@@ -37,6 +37,7 @@ function HomePage() {
         <Destinations />
         <Seasons />
         <Partners />
+        <Experiences />
         <CallToAction />
       </main>
       <Footer />
